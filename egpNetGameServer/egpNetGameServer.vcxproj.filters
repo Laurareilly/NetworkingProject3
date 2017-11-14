@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\egpNet">
+      <UniqueIdentifier>{96625965-8453-414c-a607-231fa5b70164}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\egpNet\server">
+      <UniqueIdentifier>{776c8143-c6ca-47e8-a0ad-65be6bd70b5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\egpNet">
+      <UniqueIdentifier>{5cfc0df2-6316-4f8c-a7ae-2085d73aec54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\egpNet\server">
+      <UniqueIdentifier>{06fc1615-2158-406c-9356-26f346211ffb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\egpNet\server\egpServerApplicationState.cpp">
+      <Filter>Source Files\egpNet\server</Filter>
+    </ClCompile>
+    <ClCompile Include="src\egpNetGameServer_main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\egpNet\server\egpMasterServerApplicationState.cpp">
+      <Filter>Source Files\egpNet\server</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\egpNet\server\egpServerApplicationState.h">
+      <Filter>Header Files\egpNet\server</Filter>
+    </ClInclude>
+    <ClInclude Include="include\egpNet\server\egpMasterServerApplicationState.h">
+      <Filter>Header Files\egpNet\server</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

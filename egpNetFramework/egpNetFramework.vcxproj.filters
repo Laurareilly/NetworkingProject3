@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\egpNet">
+      <UniqueIdentifier>{03a6b830-db07-463f-8769-78f997ea3ebf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\egpNet">
+      <UniqueIdentifier>{138022db-52d8-45f4-9862-e099ccad6886}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\egpNet\utils">
+      <UniqueIdentifier>{c8efae6c-4648-48af-b9fa-eac7475c31af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\egpNet\utils\_inl">
+      <UniqueIdentifier>{9e211fa9-9860-4181-bef7-a77a041b883b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\egpNet\states">
+      <UniqueIdentifier>{dc54cb68-7f3c-4b7d-8494-f654cb8e4e05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\egpNet\utils">
+      <UniqueIdentifier>{d3a28e24-7249-4c0a-8d7c-fb7f91fccfb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\egpNet\states">
+      <UniqueIdentifier>{8d755eb9-c409-4f0e-b651-c8d27fd3bef2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\egpNetFW_main.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\egpNet\egpApplicationState.cpp">
+      <Filter>Source Files\egpNet</Filter>
+    </ClCompile>
+    <ClCompile Include="src\egpNet\egpGameState.cpp">
+      <Filter>Source Files\egpNet</Filter>
+    </ClCompile>
+    <ClCompile Include="src\egpNet\utils\egpThread.c">
+      <Filter>Source Files\egpNet\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\egpNet\states\egpNetPlaygroundGameState.cpp">
+      <Filter>Source Files\egpNet\states</Filter>
+    </ClCompile>
+    <ClCompile Include="src\egpNet\states\egpNetPlaygroundGameStateDrawable.cpp">
+      <Filter>Source Files\egpNet\states</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\egpNet\egpApplicationState.h">
+      <Filter>Header Files\egpNet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\egpNet\utils\egpTimer.h">
+      <Filter>Header Files\egpNet\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\egpNet\egpGameState.h">
+      <Filter>Header Files\egpNet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\egpNet\utils\egpInput.h">
+      <Filter>Header Files\egpNet\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\egpNet\utils\egpThread.h">
+      <Filter>Header Files\egpNet\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\egpNet\states\egpNetPlaygroundGameState.h">
+      <Filter>Header Files\egpNet\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\egpNet\states\egpNetPlaygroundGameStateDrawable.h">
+      <Filter>Header Files\egpNet\states</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\include\egpNet\utils\_inl\egpTimer.inl">
+      <Filter>Header Files\egpNet\utils\_inl</Filter>
+    </None>
+    <None Include="..\include\egpNet\utils\_inl\egpInput.inl">
+      <Filter>Header Files\egpNet\utils\_inl</Filter>
+    </None>
+  </ItemGroup>
+</Project>

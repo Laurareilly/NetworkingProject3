@@ -1,0 +1,71 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "egpNetGameServer", "egpNetGameServer\egpNetGameServer.vcxproj", "{CAB7E309-45C2-4BD9-A3E3-570922CD376E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A821940E-6A57-4942-89FB-B8FF585276CD} = {A821940E-6A57-4942-89FB-B8FF585276CD}
+		{D2A2F72F-78D2-4BAC-B3F2-97927DC77684} = {D2A2F72F-78D2-4BAC-B3F2-97927DC77684}
+	EndProjectSection
+	GlobalSection(HgVSProperties) = preSolution
+		SolutionIsControlled = True
+		SolutionBindings = <Solution Location In Database>
+	EndGlobalSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "egpNetGameClient", "egpNetGameClient\egpNetGameClient.vcxproj", "{A821940E-6A57-4942-89FB-B8FF585276CD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D2A2F72F-78D2-4BAC-B3F2-97927DC77684} = {D2A2F72F-78D2-4BAC-B3F2-97927DC77684}
+	EndProjectSection
+	GlobalSection(HgVSProperties) = preSolution
+		SolutionIsControlled = True
+		SolutionBindings = <Solution Location In Database>
+	EndGlobalSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "egpNetFramework", "egpNetFramework\egpNetFramework.vcxproj", "{D2A2F72F-78D2-4BAC-B3F2-97927DC77684}"
+	GlobalSection(HgVSProperties) = preSolution
+		SolutionIsControlled = True
+		SolutionBindings = <Solution Location In Database>
+	EndGlobalSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CAB7E309-45C2-4BD9-A3E3-570922CD376E}.Debug|x64.ActiveCfg = Debug|x64
+		{CAB7E309-45C2-4BD9-A3E3-570922CD376E}.Debug|x64.Build.0 = Debug|x64
+		{CAB7E309-45C2-4BD9-A3E3-570922CD376E}.Debug|x86.ActiveCfg = Debug|Win32
+		{CAB7E309-45C2-4BD9-A3E3-570922CD376E}.Debug|x86.Build.0 = Debug|Win32
+		{CAB7E309-45C2-4BD9-A3E3-570922CD376E}.Release|x64.ActiveCfg = Release|x64
+		{CAB7E309-45C2-4BD9-A3E3-570922CD376E}.Release|x64.Build.0 = Release|x64
+		{CAB7E309-45C2-4BD9-A3E3-570922CD376E}.Release|x86.ActiveCfg = Release|Win32
+		{CAB7E309-45C2-4BD9-A3E3-570922CD376E}.Release|x86.Build.0 = Release|Win32
+		{A821940E-6A57-4942-89FB-B8FF585276CD}.Debug|x64.ActiveCfg = Debug|x64
+		{A821940E-6A57-4942-89FB-B8FF585276CD}.Debug|x64.Build.0 = Debug|x64
+		{A821940E-6A57-4942-89FB-B8FF585276CD}.Debug|x86.ActiveCfg = Debug|Win32
+		{A821940E-6A57-4942-89FB-B8FF585276CD}.Debug|x86.Build.0 = Debug|Win32
+		{A821940E-6A57-4942-89FB-B8FF585276CD}.Release|x64.ActiveCfg = Release|x64
+		{A821940E-6A57-4942-89FB-B8FF585276CD}.Release|x64.Build.0 = Release|x64
+		{A821940E-6A57-4942-89FB-B8FF585276CD}.Release|x86.ActiveCfg = Release|Win32
+		{A821940E-6A57-4942-89FB-B8FF585276CD}.Release|x86.Build.0 = Release|Win32
+		{D2A2F72F-78D2-4BAC-B3F2-97927DC77684}.Debug|x64.ActiveCfg = Debug|x64
+		{D2A2F72F-78D2-4BAC-B3F2-97927DC77684}.Debug|x64.Build.0 = Debug|x64
+		{D2A2F72F-78D2-4BAC-B3F2-97927DC77684}.Debug|x86.ActiveCfg = Debug|Win32
+		{D2A2F72F-78D2-4BAC-B3F2-97927DC77684}.Debug|x86.Build.0 = Debug|Win32
+		{D2A2F72F-78D2-4BAC-B3F2-97927DC77684}.Release|x64.ActiveCfg = Release|x64
+		{D2A2F72F-78D2-4BAC-B3F2-97927DC77684}.Release|x64.Build.0 = Release|x64
+		{D2A2F72F-78D2-4BAC-B3F2-97927DC77684}.Release|x86.ActiveCfg = Release|Win32
+		{D2A2F72F-78D2-4BAC-B3F2-97927DC77684}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(HgVSProperties) = preSolution
+		SolutionIsControlled = True
+		SolutionBindings = <Solution Location In Database>
+	EndGlobalSection
+EndGlobal
