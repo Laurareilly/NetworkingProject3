@@ -173,11 +173,9 @@ xcopy /y "$(DEV_SDK_DIR)bin\$(PlatformTarget)\$(PlatformToolset)\$(Configuration
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\egpNetGameServer_main.cpp" />
-    <ClCompile Include="src\egpNet\server\egpMasterServerApplicationState.cpp" />
     <ClCompile Include="src\egpNet\server\egpServerApplicationState.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\egpNet\server\egpMasterServerApplicationState.h" />
     <ClInclude Include="include\egpNet\server\egpServerApplicationState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

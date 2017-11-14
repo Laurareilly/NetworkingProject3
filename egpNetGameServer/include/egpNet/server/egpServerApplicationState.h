@@ -28,7 +28,7 @@ class egpServerApplicationState : public egpApplicationState
 
 public:
 
-	egpServerApplicationState(const unsigned int maxIncomingConnections);
+	egpServerApplicationState();
 	virtual ~egpServerApplicationState();
 
 	// callbacks

@@ -26,7 +26,7 @@ int egpClientApplicationState::UpdateNetworking()
 
 int egpClientApplicationState::ProcessPacket(const RakNet::Packet *packet)
 {
-	int i = egpApplicationState::ProcessPacket(packet);
+	egpApplicationState::ProcessPacket(packet);
 
 	// additional processing
 	if (mp_peer && packet)
@@ -53,7 +53,7 @@ int egpClientApplicationState::ProcessPacket(const RakNet::Packet *packet)
 				userData += ReadTimeStamp((char *)userData, sentToReadDiff_remote, sentToReadDiff_other);
 				int otherID = *((int *)userData);
 				userData += sizeof(otherID);
-				printf(" Other (%d) -> Server = %I64d;  Server -> Local (%d) = %I64d \n\n", otherID, sentToReadDiff_remote, m_myConnectionIndex, sentToReadDiff_local);
+				//printf(" Other (%d) -> Server = %I64d;  Server -> Local (%d) = %I64d \n\n", otherID, sentToReadDiff_remote, m_myConnectionIndex, sentToReadDiff_local);
 			}	break;
 
 			case egpID_stateUpdate: {
@@ -62,6 +62,8 @@ int egpClientApplicationState::ProcessPacket(const RakNet::Packet *packet)
 				int otherID = *((int *)userData);
 				userData += sizeof(otherID);
 
+		//		printf("Networked update\n");
+
 				// ****TO-DO: 
 				// state decodes data
 				if (mp_state)
@@ -69,25 +71,14 @@ int egpClientApplicationState::ProcessPacket(const RakNet::Packet *packet)
 					const double delay_s = (double)(sentToReadDiff_local + sentToReadDiff_remote) * 0.001;
 					userData += mp_state->DeserializeData((char*)userData, 4096, 0, delay_s);
 				}
-			} break;
+			}	break;
 
 			case 0:
 				printf("No data. \n\n");
 				break;
 			}
 
-		} break;
-
-
-			// ******TO-DO: 
-			// connected to server, tell it we're a client
-			//	and see what we get back
-		case ID_CONNECTION_REQUEST_ACCEPTED: {
-			char msg[1] = { (char)egpID_clientFlag };
-
-			SendPacket(msg, sizeof(msg), m_maxIncomingConnections, 0, 1);
-
-		} break;
+		}	return 1;
 
 
 			// create state after receiving connection index
@@ -95,36 +86,14 @@ int egpClientApplicationState::ProcessPacket(const RakNet::Packet *packet)
 			// testing: create game state
 			// normally this would be handled by a manager
 			mp_state = new egpNetPlaygroundGameStateDrawable(m_myConnectionIndex);
-			break;
-
-
-			// ******TO-DO: 
-			// server list update
-			// should be able to ask for this repeatedly 
-			//	by sending the 'client flag' message
-		case egpID_serverList: {
-			const unsigned int count = *((int *)(packet->data + 1));
-			printf("\n Server list: ");
-			if (count > 0)
-			{
-				const unsigned int addressSize = 16;
-				const unsigned char *address = packet->data + sizeof(char) + sizeof(int);
-				unsigned int c;
-				for (c = 0; c < count; ++c, address += addressSize)
-				{
-					printf("\n   %s", address);
-				}
-			}
-
-		} break;
-
+			return 1;
 
 			// destroy state if we get disconnected
 		case ID_DISCONNECTION_NOTIFICATION: 
 		case ID_CONNECTION_LOST:
 			delete mp_state;
 			mp_state = 0;
-			break;
+			return 1;
 
 
 	//	default:
@@ -133,7 +102,7 @@ int egpClientApplicationState::ProcessPacket(const RakNet::Packet *packet)
 		}
 	}
 
-	return i;
+	return 0;
 }
 
 
@@ -167,9 +136,6 @@ egpClientApplicationState::egpClientApplicationState()
 
 	// start timers
 	egpTimerStart(m_updateRenderTimer);
-
-	// start out not connected to game
-	m_connectedGameServer = 0;
 }
 
 egpClientApplicationState::~egpClientApplicationState()
@@ -220,21 +186,13 @@ int egpClientApplicationState::OnKeyPress(unsigned char key)
 	switch (key)
 	{
 	case 'C':
-		if (StartupNetworking(0, 1, GetDefaultPort() + 2))
+		if (StartupNetworking(0, 1, GetDefaultPort() + 1))
 		{
-			bool server = true;
 			char address[16] = { 0 };
-			printf("\n Enter the master or game server IP address using this 15-character format: ");
+			printf("\n Enter the host/server IP address using this 15-character format: ");
 			printf("\n  ###.###.###.### \n    -> ");
 			fscanf(stdin, "%s", address);
 			address[sizeof(address) - 1] = 0;
-
-			//printf("\n Type 'M' or 'm' if target IP is a master server: ");
-			//if (toupper(getc(stdin)) == 'M')
-			//	server = false;
-
-			// connect
-			//ConnectPeer(address, GetDefaultPort() + server ? 1 : 0);
 			ConnectPeer(address, GetDefaultPort());
 		}
 		break;

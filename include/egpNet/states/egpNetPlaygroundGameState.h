@@ -31,6 +31,8 @@ class egpNetPlaygroundGameState : public egpGameState
 
 protected:
 
+	bool updatedWhenNotMoving = false;
+
 	enum NetPlaygroundObjectLimits
 	{
 		objLimit_agent = 8,

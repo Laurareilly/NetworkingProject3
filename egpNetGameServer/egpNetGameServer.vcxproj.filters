@@ -33,15 +33,9 @@
     <ClCompile Include="src\egpNetGameServer_main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\egpNet\server\egpMasterServerApplicationState.cpp">
-      <Filter>Source Files\egpNet\server</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\egpNet\server\egpServerApplicationState.h">
-      <Filter>Header Files\egpNet\server</Filter>
-    </ClInclude>
-    <ClInclude Include="include\egpNet\server\egpMasterServerApplicationState.h">
       <Filter>Header Files\egpNet\server</Filter>
     </ClInclude>
   </ItemGroup>

@@ -29,6 +29,7 @@ class egpApplicationState abstract
 protected: 
 
 	egpApplicationState();
+	virtual ~egpApplicationState();
 
 	// common input device tracking
 	egpKeyboard m_keyboard[1];
@@ -73,15 +74,10 @@ protected:
 	enum me_PacketIdentifier
 	{
 		egpID_packetBegin = ID_USER_PACKET_ENUM,
-
-		egpID_connectionIndex,	// message contains unique ID
-		egpID_serverFlag,		// message indicates sender is a server
-		egpID_clientFlag,		// message indicates sender is a client
-		egpID_serverList,		// message contains server list
-
-		egpID_currentTime,		// message contains time-stamped update
-		egpID_stateInput,		// user data after time stamp contains game state input
-		egpID_stateUpdate,		// user data after time stamp contains game state data
+		egpID_connectionIndex,
+		egpID_currentTime,
+		egpID_stateInput,
+		egpID_stateUpdate,
 	};
 
 
@@ -111,9 +107,6 @@ private:
 
 public: 
 
-	// dtor
-	virtual ~egpApplicationState();
-
 	// common callbacks
 	virtual int OnIdle();
 	virtual int OnKeyPress(unsigned char key);
@@ -129,7 +122,6 @@ public:
 	virtual int StartupNetworking(const unsigned int maxIncomingConnections, const int doesConnect, const unsigned short portIncoming);
 	virtual int ShutdownNetworking();
 	virtual int ConnectPeer(const char address[16], const unsigned short port);
-	virtual int DisconnectPeer();
 
 	static unsigned short GetDefaultPort();
 	static unsigned short GetUserPort();

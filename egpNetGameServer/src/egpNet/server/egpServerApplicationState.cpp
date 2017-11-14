@@ -26,7 +26,7 @@ int egpServerApplicationState::UpdateNetworking()
 
 int egpServerApplicationState::ProcessPacket(const RakNet::Packet *packet)
 {
-	int i = egpApplicationState::ProcessPacket(packet);
+	egpApplicationState::ProcessPacket(packet);
 
 	// additional processing opportunity
 	if (mp_peer && packet)
@@ -66,7 +66,7 @@ int egpServerApplicationState::ProcessPacket(const RakNet::Packet *packet)
 
 				SendPacket(msg, (int)(msgPtr - msg), otherID, 1, 0);
 				printf(" Broadcast update message from (%d) at time %I64d \n\n", otherID, packetTime_local);
-			} break;
+			}	break;
 
 			case egpID_stateInput: {
 				// receive input from other, process input as if it were input into our state
@@ -100,7 +100,8 @@ int egpServerApplicationState::ProcessPacket(const RakNet::Packet *packet)
 				// state decodes data
 				if (mp_state)
 				{
-
+					const double delay_s = (double)(sentToReadDiff_local + sentToReadDiff_remote) * 0.001;
+					mp_state->DeserializeData((char*)userData, 4096, 0, delay_s);
 				}
 			} break;
 
@@ -109,32 +110,21 @@ int egpServerApplicationState::ProcessPacket(const RakNet::Packet *packet)
 				break;
 			}
 
-		} break;
+		}	return 1;
 
-
-			// ******TO-DO: 
-			// server receiving this means it is connected 
-			//	to master server; tell master that this is a server
-		case ID_CONNECTION_REQUEST_ACCEPTED: {
-			char msg[1] = { (char)egpID_serverFlag };
-
-			SendPacket(msg, sizeof(msg), m_maxIncomingConnections, 0, 1);
-
-		} break;
-
-
-			// ******TO-DO: (done)
-			// client connected
-		case egpID_clientFlag: {
+		case ID_NEW_INCOMING_CONNECTION: {
 			// additional processing for accepted request: 
 			// send connection index of new participant
+			int i = GetConnectionIndex(packet->systemAddress);
 			if (i >= 0)
 			{
-				char msg[5] = { (char)egpID_connectionIndex };
-				*((int *)(msg + 1)) = i;
-				SendPacket(msg, sizeof(msg), i, 0, 1);
+				char msg[8] = { 0 }, *msgPtr = msg;
+				*(msgPtr++) = (char)egpID_connectionIndex;
+				*((int *)msgPtr) = i;
+				msgPtr += sizeof(i);
+				SendPacket(msg, (int)(msgPtr - msg), i, 0, 1);
 			}
-		} break;
+		}	return 1;
 
 
 	//	default:
@@ -143,12 +133,12 @@ int egpServerApplicationState::ProcessPacket(const RakNet::Packet *packet)
 		}
 	}
 
-	return i;
+	return 0;
 }
 
 
 
-egpServerApplicationState::egpServerApplicationState(const unsigned int maxIncomingConnections)
+egpServerApplicationState::egpServerApplicationState()
 	: egpApplicationState()
 {
 	// set timer
@@ -157,15 +147,6 @@ egpServerApplicationState::egpServerApplicationState(const unsigned int maxIncom
 	// start timer
 	egpTimerStart(m_updateTimer);
 
-	// start networking and connect to master server
-	if (StartupNetworking(maxIncomingConnections, 1, GetDefaultPort() + 1))
-	{
-		char address[16] = { 0 };
-		printf("\n Enter the master server IP address using this 15-character format: ");
-		printf("\n  ###.###.###.### \n    -> ");
-		fscanf(stdin, "%s", address);
-		ConnectPeer(address, GetDefaultPort());
-	}
 
 	// testing: create game state
 	// normally this would be handled by a manager
@@ -174,8 +155,7 @@ egpServerApplicationState::egpServerApplicationState(const unsigned int maxIncom
 
 egpServerApplicationState::~egpServerApplicationState()
 {
-	// stop networking
-	ShutdownNetworking();
+
 }
 
 

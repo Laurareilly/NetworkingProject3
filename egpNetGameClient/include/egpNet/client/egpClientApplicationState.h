@@ -23,9 +23,6 @@ class egpClientApplicationState : public egpApplicationState
 	// throttles
 	egpTimer m_updateRenderTimer[1];
 
-	// connected to normal server (i.e. game)
-	int m_connectedGameServer;
-
 
 	// internal updates
 	virtual int UpdateNetworking();

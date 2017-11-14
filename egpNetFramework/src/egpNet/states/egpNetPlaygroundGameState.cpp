@@ -116,10 +116,14 @@ int egpNetPlaygroundGameState::ProcessInput(const egpKeyboard *keyboard, const e
 		if (keyboard)
 		{
 			agentPtr->velX = agentMoveSpeed * (float)(egpKeyboardKeyIsDown(keyboard, 'd') - egpKeyboardKeyIsDown(keyboard, 'a'));
-			agentPtr->velY = agentMoveSpeed * (float)(egpKeyboardKeyIsDown(keyboard, 'w') - egpKeyboardKeyIsDown(keyboard, 's'));
+			//*agentPtr->velY = agentMoveSpeed * (float)(egpKeyboardKeyIsDown(keyboard, 'w') - egpKeyboardKeyIsDown(keyboard, 's');
+
+			//P1 stops moving on P2 screen, but P2 still slides in the direction they started
+			if ((float)(egpKeyboardKeyIsUp(keyboard, 'd')))
+				updatedWhenNotMoving = false;
 
 			// debug print
-			printf(" vel (%d) = %f, %f \n\n", ctrlID, agentPtr->velX, agentPtr->velY);
+			//printf(" vel (%d) = %f, %f \n\n", ctrlID, agentPtr->velX, agentPtr->velY);
 		}
 		if (mouse)
 		{
@@ -153,12 +157,19 @@ int egpNetPlaygroundGameState::UpdateState(double dt)
 			agentPtr->posX += (float)dt * agentPtr->velX;
 			agentPtr->posY += (float)dt * agentPtr->velY;
 
+//			printf("Local update\n");
+
 			// check for changes, raise flag if changes occur
-			if (memcmp(agentPrev, agentPtr, sizeof(NetPlaygroundAgent)))
+			if (memcmp(agentPrev, agentPtr, sizeof(NetPlaygroundAgent)) || !updatedWhenNotMoving)
+			{
 				agentStatusPtr->flags |= objFlag_change;
+				updatedWhenNotMoving = true;
+			}
 			// lower changed flags so objects don't automatically get serialized next update
 			else
+			{
 				agentStatusPtr->flags &= ~(objFlag_change);
+			}
 		}
 	}
 

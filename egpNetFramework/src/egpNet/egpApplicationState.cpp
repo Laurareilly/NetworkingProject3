@@ -90,10 +90,6 @@ int egpApplicationState::UpdateNetworking()
 
 int egpApplicationState::ProcessPacket(const RakNet::Packet *packet)
 {
-	// index of affected connection
-	// useful for returning to subclass call
-	int i = -1;
-
 	if (mp_peer && packet)
 	{
 		// peek at first byte, process common cases
@@ -103,29 +99,29 @@ int egpApplicationState::ProcessPacket(const RakNet::Packet *packet)
 
 		case ID_REMOTE_DISCONNECTION_NOTIFICATION:
 			printf("Another client has disconnected.\n");
-			break;
+			return 1;
 		case ID_REMOTE_CONNECTION_LOST:
 			printf("Another client has lost the connection.\n");
-			break;
+			return 1;
 		case ID_REMOTE_NEW_INCOMING_CONNECTION:
 			printf("Another client has connected.\n");
-			break;
+			return 1;
 		case ID_NO_FREE_INCOMING_CONNECTIONS:
 			printf("The server is full.\n");
-			break;
+			return 1;
 		case ID_CONNECTION_ATTEMPT_FAILED:
 			printf("Failed to connect.\n");
-			break;
+			return 1;
 
 		case ID_CONNECTION_REQUEST_ACCEPTED: {
-			i = m_maxIncomingConnections;
+			int i = m_maxIncomingConnections;
 			++m_numOutgoingConnections;
 			mp_connection[i].m_active = 1;
 			mp_connection[i].m_address = packet->systemAddress;
 			printf("Our connection request has been accepted.\n");
-		}	break;
+		}	return 1;
 		case ID_NEW_INCOMING_CONNECTION: {
-			i = GetConnectionIndexOpen();
+			int i = GetConnectionIndexOpen();
 			if (i >= 0)
 			{
 				++m_numIncomingConnections;
@@ -133,9 +129,9 @@ int egpApplicationState::ProcessPacket(const RakNet::Packet *packet)
 				mp_connection[i].m_address = packet->systemAddress;
 			}
 			printf("A connection is incoming.\n");
-		}	break;
+		}	return 1;
 		case ID_DISCONNECTION_NOTIFICATION: {
-			i = m_maxIncomingConnections;
+			int i = m_maxIncomingConnections;
 			if (m_maxOutgoingConnections && packet->systemAddress == mp_connection[i].m_address) {
 				--m_numOutgoingConnections;
 				mp_connection[i].m_active = 0;
@@ -152,9 +148,9 @@ int egpApplicationState::ProcessPacket(const RakNet::Packet *packet)
 				}
 				printf("A client has disconnected.\n");
 			}
-		}	break;
+		}	return 1;
 		case ID_CONNECTION_LOST: {
-			i = m_maxIncomingConnections;
+			int i = m_maxIncomingConnections;
 			if (m_maxOutgoingConnections && packet->systemAddress == mp_connection[i].m_address) {
 				mp_connection[i].m_active = 0;
 				mp_connection[i].m_address = RakNet::UNASSIGNED_SYSTEM_ADDRESS;
@@ -169,19 +165,17 @@ int egpApplicationState::ProcessPacket(const RakNet::Packet *packet)
 					printf("A client lost the connection.\n");
 				}
 			}
-		}	break;
+		}	return 1;
 
 		case egpID_connectionIndex: {
 			// receiving connection index
-			i = m_myConnectionIndex = *((int *)(packet->data + 1));
+			m_myConnectionIndex = *((int *)(packet->data + 1));
 			printf("Received connection index %d.\n", m_myConnectionIndex);
-		}	break;
+		}	return 1;
 
 		}
 	}
-
-	// return index, if any
-	return i;
+	return 0;
 }
 
 
@@ -557,19 +551,6 @@ int egpApplicationState::ConnectPeer(const char address[16], const unsigned shor
 	{
 		m_portOutgoing = port;
 		mp_peer->Connect(address, port, 0, 0);
-
-		// done
-		return 1;
-	}
-	return 0;
-}
-
-int egpApplicationState::DisconnectPeer()
-{
-	if (mp_peer)
-	{
-		m_portOutgoing = 0;
-		mp_peer->CloseConnection(mp_connection[m_maxIncomingConnections].m_address, true);
 
 		// done
 		return 1;
