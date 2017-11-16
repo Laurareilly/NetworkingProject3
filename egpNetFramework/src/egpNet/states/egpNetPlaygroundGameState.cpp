@@ -119,7 +119,7 @@ int egpNetPlaygroundGameState::ProcessInput(const egpKeyboard *keyboard, const e
 			agentPtr->velY = agentMoveSpeed * (float)(egpKeyboardKeyIsDown(keyboard, 'w') - egpKeyboardKeyIsDown(keyboard, 's'));
 		//	updatedWhenNotMoving = false;
 			// debug print
-			//printf(" vel (%d) = %f, %f \n\n", ctrlID, agentPtr->velX, agentPtr->velY);
+			printf(" vel (%d) = %f, %f \n\n", ctrlID, agentPtr->velX, agentPtr->velY);
 		}
 		if (mouse)
 		{
@@ -151,7 +151,7 @@ int egpNetPlaygroundGameState::UpdateState(double dt)
 
 			// update agent
 			agentPtr->posX += (float)dt * agentPtr->velX;
-			agentPtr->velY = 0; //For some reason if we don't do this, we can't move left or right at all
+			//agentPtr->velY = 0; //For some reason if we don't do this, we can't move left or right at all
 			agentPtr->posY += (float)dt * agentPtr->velY;
 
 //			printf("Local update\n");
