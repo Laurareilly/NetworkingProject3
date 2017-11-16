@@ -86,6 +86,7 @@ int egpClientApplicationState::ProcessPacket(const RakNet::Packet *packet)
 			// testing: create game state
 			// normally this would be handled by a manager
 			mp_state = new egpNetPlaygroundGameStateDrawable(m_myConnectionIndex);
+			
 			return 1;
 
 			// destroy state if we get disconnected

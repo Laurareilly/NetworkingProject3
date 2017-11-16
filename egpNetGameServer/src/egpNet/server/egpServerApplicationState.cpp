@@ -142,7 +142,7 @@ egpServerApplicationState::egpServerApplicationState()
 	: egpApplicationState()
 {
 	// set timer
-	egpTimerSet(m_updateTimer, 30.0);
+	egpTimerSet(m_updateTimer, 10.0);
 
 	// start timer
 	egpTimerStart(m_updateTimer);
