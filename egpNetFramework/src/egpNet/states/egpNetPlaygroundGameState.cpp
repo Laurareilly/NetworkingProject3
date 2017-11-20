@@ -94,6 +94,9 @@ int egpNetPlaygroundGameState::DeserializeData(const char *buffer, const unsigne
 				agentPtr = m_data->m_agent + objectStatusPtr->objID;
 				*agentStatusPtr = *objectStatusPtr;
 				*agentPtr = *((NetPlaygroundAgent *)buffer);
+
+				//agentPtr->posY = -200;
+
 				buffer += sizeof(NetPlaygroundAgent);
 				break;
 			}
@@ -116,7 +119,7 @@ int egpNetPlaygroundGameState::ProcessInput(const egpKeyboard *keyboard, const e
 		if (keyboard)
 		{
 			agentPtr->velX = agentMoveSpeed * (float)(egpKeyboardKeyIsDown(keyboard, 'd') - egpKeyboardKeyIsDown(keyboard, 'a'));
-			agentPtr->velY = agentMoveSpeed * (float)(egpKeyboardKeyIsDown(keyboard, 'w') - egpKeyboardKeyIsDown(keyboard, 's'));
+			agentPtr->velY = 0;// agentMoveSpeed * (float)(egpKeyboardKeyIsDown(keyboard, 'w') - egpKeyboardKeyIsDown(keyboard, 's'));
 		//	updatedWhenNotMoving = false;
 			// debug print
 			printf(" vel (%d) = %f, %f \n\n", ctrlID, agentPtr->velX, agentPtr->velY);
@@ -171,4 +174,13 @@ int egpNetPlaygroundGameState::UpdateState(double dt)
 	}
 
 	return 0;
+}
+
+void egpNetPlaygroundGameState::AddAgent(int ID)
+{
+	m_data->m_agentStatus[ID].flags = objFlag_active;
+	m_data->m_agent[ID].posX = 0;
+	m_data->m_agent[ID].posY = -200;
+	//m_data->m_agent->posX = 0;
+	//m_data->m_agent->posY = -200;
 }

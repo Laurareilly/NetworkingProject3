@@ -28,6 +28,15 @@ protected:
 
 public: 
 
+	struct StateData
+	{
+		bool isLocal = false;
+		char doesDisplay;
+		char doesUpdateState;
+		char doesUpdateNetworking;
+		char enterServer;
+	}data;
+
 	// virtual dtor
 	virtual ~egpGameState();
 	
@@ -37,12 +46,16 @@ public:
 	//	- process input devices
 	//	- update state given time step
 	//	- draw state
+	//  - handle state changes
 
 	virtual int SerializeData(char *buffer, const unsigned int bufferCapacity, const unsigned int serializeCount, const double dt) const;
 	virtual int DeserializeData(const char *buffer, const unsigned int bufferCapacity, const unsigned int deserializeCount, const double dt);
 	virtual int ProcessInput(const egpKeyboard *keyboard, const egpMouse *mouse, const unsigned int ctrlID, const double dt);
 	virtual int UpdateState(double dt);
 	virtual int RenderState(int canvasWidth, int canvasHeight, int canvasPosX, int canvasPosY) const;
+
+	virtual int OnArriveFromPrevious(egpGameState *state);
+	virtual int OnGoToNextState(egpGameState *state);
 
 };
 

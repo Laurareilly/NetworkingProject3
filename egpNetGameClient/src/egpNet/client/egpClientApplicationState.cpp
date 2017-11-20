@@ -15,9 +15,12 @@
 #include "egpNet/states/egpNetPlaygroundGameStateDrawable.h"
 
 
+
 // internal updates
 int egpClientApplicationState::UpdateNetworking()
 {
+	if (mp_state != nullptr && mp_state->data.isLocal) return -1;
+
 	unsigned int i = egpApplicationState::UpdateNetworking();
 
 	// done
@@ -26,6 +29,8 @@ int egpClientApplicationState::UpdateNetworking()
 
 int egpClientApplicationState::ProcessPacket(const RakNet::Packet *packet)
 {
+	if (mp_state != nullptr && mp_state->data.isLocal) return -1; //just in case
+
 	egpApplicationState::ProcessPacket(packet);
 
 	// additional processing
@@ -160,7 +165,7 @@ int egpClientApplicationState::OnIdle()
 		if (mp_state)
 		{
 			// ****TO-DO: send input to server
-			SendStateInput(0, m_maxIncomingConnections, 0, 0);
+			if(!mp_state->data.isLocal) SendStateInput(0, m_maxIncomingConnections, 0, 0);
 
 			// ****TO-DO: process input locally
 			//tell the state to process input
@@ -187,14 +192,17 @@ int egpClientApplicationState::OnKeyPress(unsigned char key)
 	switch (key)
 	{
 	case 'C':
-		if (StartupNetworking(0, 1, GetDefaultPort() + 1))
+		if (mp_state == nullptr)
 		{
-			char address[16] = { 0 };
-			printf("\n Enter the host/server IP address using this 15-character format: ");
-			printf("\n  ###.###.###.### \n    -> ");
-			fscanf(stdin, "%s", address);
-			address[sizeof(address) - 1] = 0;
-			ConnectPeer(address, GetDefaultPort());
+			if (StartupNetworking(0, 1, GetDefaultPort() + 1))
+			{
+				char address[16] = { 0 };
+				printf("\n Enter the host/server IP address using this 15-character format: ");
+				printf("\n  ###.###.###.### \n    -> ");
+				fscanf(stdin, "%s", address);
+				address[sizeof(address) - 1] = 0;
+				ConnectPeer(address, GetDefaultPort());
+			}
 		}
 		break;
 	case 'X':
@@ -229,6 +237,16 @@ int egpClientApplicationState::OnKeyPress(unsigned char key)
 
 			SendPacket(msg, (int)(msgPtr - msg), m_maxIncomingConnections, 0, 0);
 			printf(" Sent update message at time %I64d \n\n", packetTime_local);
+		}
+		break;
+	case 'l':
+	case 'L':
+		if (mp_state == nullptr)
+		{
+			mp_state = new egpNetPlaygroundGameStateDrawable(0); //no connection index because this is local //THIS USED TO BE DRAWABLE INCAS THIS DOESNT WORK
+			m_myConnectionIndex = 0;
+			mp_state->data.isLocal = true;
+			dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->AddAgent(1);
 		}
 		break;
 	}

@@ -52,3 +52,13 @@ int egpGameState::RenderState(int canvasWidth, int canvasHeight, int canvasPosX,
 {
 	return 0;
 }
+
+int egpGameState::OnArriveFromPrevious(egpGameState * state)
+{
+	return 0;
+}
+
+int egpGameState::OnGoToNextState(egpGameState * state)
+{
+	return 0;
+}

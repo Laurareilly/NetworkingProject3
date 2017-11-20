@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Lobby.cpp" />
+    <ClCompile Include="LobbyState.cpp" />
     <ClCompile Include="src\egpNetFW_main.c" />
     <ClCompile Include="src\egpNet\egpApplicationState.cpp" />
     <ClCompile Include="src\egpNet\egpGameState.cpp" />
@@ -34,6 +36,7 @@
     <ClInclude Include="..\include\egpNet\utils\egpInput.h" />
     <ClInclude Include="..\include\egpNet\utils\egpThread.h" />
     <ClInclude Include="..\include\egpNet\utils\egpTimer.h" />
+    <ClInclude Include="LobbyState.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\include\egpNet\utils\_inl\egpInput.inl" />

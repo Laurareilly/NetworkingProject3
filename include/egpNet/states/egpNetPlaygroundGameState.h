@@ -84,6 +84,10 @@ public:
 	virtual int ProcessInput(const egpKeyboard *keyboard, const egpMouse *mouse, const unsigned int ctrlID, const double dt);
 	virtual int UpdateState(double dt);
 
+	virtual int OnArriveFromPrevious(egpGameState *state) { return 0; };
+	virtual int OnGoToNextState(egpGameState *state) { return 0; };
+
+	void AddAgent(int ID);
 };
 
 

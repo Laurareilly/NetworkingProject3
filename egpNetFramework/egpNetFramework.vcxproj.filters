@@ -54,6 +54,12 @@
     <ClCompile Include="src\egpNet\states\egpNetPlaygroundGameStateDrawable.cpp">
       <Filter>Source Files\egpNet\states</Filter>
     </ClCompile>
+    <ClCompile Include="Lobby.cpp">
+      <Filter>Source Files\egpNet\states</Filter>
+    </ClCompile>
+    <ClCompile Include="LobbyState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\egpNet\egpApplicationState.h">
@@ -75,6 +81,9 @@
       <Filter>Header Files\egpNet\states</Filter>
     </ClInclude>
     <ClInclude Include="..\include\egpNet\states\egpNetPlaygroundGameStateDrawable.h">
+      <Filter>Header Files\egpNet\states</Filter>
+    </ClInclude>
+    <ClInclude Include="LobbyState.h">
       <Filter>Header Files\egpNet\states</Filter>
     </ClInclude>
   </ItemGroup>
