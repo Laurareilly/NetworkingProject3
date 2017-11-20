@@ -34,6 +34,9 @@
     <Filter Include="Source Files\egpNet\states">
       <UniqueIdentifier>{8d755eb9-c409-4f0e-b651-c8d27fd3bef2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\egpNet\events">
+      <UniqueIdentifier>{96afa86c-73b6-4837-916b-0130c3bfb49c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\egpNetFW_main.c">
@@ -85,6 +88,15 @@
     </ClInclude>
     <ClInclude Include="LobbyState.h">
       <Filter>Header Files\egpNet\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\egpNet\events\Event.h">
+      <Filter>Header Files\egpNet\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\egpNet\events\MyEvents.h">
+      <Filter>Header Files\egpNet\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\egpNet\events\Queue.h">
+      <Filter>Header Files\egpNet\events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

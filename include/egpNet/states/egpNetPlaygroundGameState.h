@@ -11,6 +11,7 @@
 #define __EGP_NETPLAYGROUNDGAMESTATE_H_
 
 #include "egpNet/egpGameState.h"
+#include "egpNet\events\Event.h"
 
 
 class egpNetPlaygroundGameState : public egpGameState
@@ -30,6 +31,8 @@ class egpNetPlaygroundGameState : public egpGameState
 	// serialization and deserialization algorithms
 	// general rule: 
 	//	- object header/status, object data, header, data, ...
+
+	EventManager *mpEventManager;
 
 protected:
 

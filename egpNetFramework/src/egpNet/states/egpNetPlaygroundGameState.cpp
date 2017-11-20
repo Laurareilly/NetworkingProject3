@@ -14,12 +14,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <cmath>
+#include "egpNet\events\MyEvents.h"
 
 
 egpNetPlaygroundGameState::egpNetPlaygroundGameState(int ownerID)
 	: egpGameState(ownerID)
 {
+	mpEventManager = new EventManager();
+
 	memset(m_data, 0, sizeof(m_data));
+
 
 	// setup all object headers
 	unsigned int i;
@@ -37,7 +41,8 @@ egpNetPlaygroundGameState::egpNetPlaygroundGameState(int ownerID)
 
 	for (i = 0; i < objLimit_ball; ++i)
 	{
-		m_data->m_balls[i].posY = -0;
+		m_data->m_balls[i].posX = 60;
+		m_data->m_balls[i].posY = -450;
 		m_data->m_balls[i].velY = -200;
 	}
 }
@@ -127,6 +132,15 @@ int egpNetPlaygroundGameState::ProcessInput(const egpKeyboard *keyboard, const e
 		{
 			agentPtr->velX = agentMoveSpeed * (float)(egpKeyboardKeyIsDown(keyboard, 'd') - egpKeyboardKeyIsDown(keyboard, 'a'));
 			agentPtr->velY = 0;// agentMoveSpeed * (float)(egpKeyboardKeyIsDown(keyboard, 'w') - egpKeyboardKeyIsDown(keyboard, 's'));
+
+			if (status->ownerID == 0)
+			{
+				if (egpKeyboardKeyIsDown(keyboard, 's'))
+				{
+					//if connected to server, call "spawn ball" event, using AddBall return value for ball ID
+					AddBall(agentPtr->posX);
+				}
+			}
 		//	updatedWhenNotMoving = false;
 			// debug print
 			//printf(" vel (%d) = %f, %f \n\n", ctrlID, agentPtr->velX, agentPtr->velY);
@@ -145,6 +159,8 @@ int egpNetPlaygroundGameState::UpdateState(double dt)
 //	m_data->m_t += dt;
 //	if (m_data->m_t >= 1.0)
 //		m_data->m_t -= 1.0;
+
+	mpEventManager->ExecuteAll();
 
 	// apply movement to all agents
 	NetPlaygroundAgent *agentPtr, agentPrev[1];
@@ -203,6 +219,8 @@ int egpNetPlaygroundGameState::UpdateState(double dt)
 				{
 					ballPtr->posY = 400;
 					//send collision event here
+					HitPlayerEvent *hitPlayer = new HitPlayerEvent();
+					mpEventManager->AddEvent(hitPlayer);
 				}
 
 			}
@@ -222,6 +240,21 @@ void egpNetPlaygroundGameState::AddAgent(int ID)
 
 int egpNetPlaygroundGameState::AddBall(float posX)
 {
+	int ballID = -1;
 
-	return 0;
+	int yLimit = -450;
+
+	unsigned int i = 0;
+
+	for (i = 0; i < objLimit_ball; ++i)
+	{
+		if (m_data->m_balls[i].posY < yLimit)
+		{
+			m_data->m_balls[i].posX = posX;
+			m_data->m_balls[i].posY = 0;
+			break;
+		}
+	}
+
+	return ballID;
 }

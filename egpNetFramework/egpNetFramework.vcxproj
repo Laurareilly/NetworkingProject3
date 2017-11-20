@@ -31,6 +31,9 @@
   <ItemGroup>
     <ClInclude Include="..\include\egpNet\egpApplicationState.h" />
     <ClInclude Include="..\include\egpNet\egpGameState.h" />
+    <ClInclude Include="..\include\egpNet\events\Event.h" />
+    <ClInclude Include="..\include\egpNet\events\MyEvents.h" />
+    <ClInclude Include="..\include\egpNet\events\Queue.h" />
     <ClInclude Include="..\include\egpNet\states\egpNetPlaygroundGameState.h" />
     <ClInclude Include="..\include\egpNet\states\egpNetPlaygroundGameStateDrawable.h" />
     <ClInclude Include="..\include\egpNet\utils\egpInput.h" />
