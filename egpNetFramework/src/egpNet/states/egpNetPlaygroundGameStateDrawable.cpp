@@ -55,6 +55,14 @@ int egpNetPlaygroundGameStateDrawable::RenderState(int canvasWidth, int canvasHe
 			glVertex2f(m_data->m_agent[i].posX, m_data->m_agent[i].posY);
 		}
 	}
+
+	for (unsigned int i = 0; i < objLimit_ball; ++i)
+	{
+		// color
+		glColor3f(1.0f, 1.0f, 0.0f);
+		glVertex2f(m_data->m_balls[i].posX, m_data->m_balls[i].posY);
+	}
+
 	glEnd();
 
 

@@ -23,6 +23,8 @@ class egpNetPlaygroundGameState : public egpGameState
 
 		// object identifiers
 		objID_agent,
+
+		objID_BALL
 	};
 
 	// serialization and deserialization algorithms
@@ -36,6 +38,7 @@ protected:
 	enum NetPlaygroundObjectLimits
 	{
 		objLimit_agent = 8,
+		objLimit_ball = 3
 	};
 
 	enum NetPlaygroundObjectFlags
@@ -55,14 +58,14 @@ protected:
 		char objType, objID, ownerID, flags;
 	};
 
-	struct NetPlaygroundAgent
+	struct NetPlaygroundAgent //repurposing this to also account for the b all
 	{
 		// position
 		float posX, posY;
 
 		// what else might help here?
 		float velX, velY;
-	};
+	};	
 
 	struct NetPlaygroundData
 	{
@@ -71,6 +74,7 @@ protected:
 
 		NetPlaygroundAgent m_agent[objLimit_agent];
 		NetPlaygroundObjectStatus m_agentStatus[objLimit_agent];
+		NetPlaygroundAgent m_balls[objLimit_ball];
 
 	} m_data[1];
 
@@ -88,6 +92,7 @@ public:
 	virtual int OnGoToNextState(egpGameState *state) { return 0; };
 
 	void AddAgent(int ID);
+	int AddBall(float posX);
 };
 
 

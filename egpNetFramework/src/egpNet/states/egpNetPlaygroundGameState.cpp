@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <cmath>
 
 
 egpNetPlaygroundGameState::egpNetPlaygroundGameState(int ownerID)
@@ -33,6 +34,12 @@ egpNetPlaygroundGameState::egpNetPlaygroundGameState(int ownerID)
 	// this may not always be the case, e.g. if one player has multiple agents
 	m_data->m_agentStatus[ownerID].ownerID = ownerID;
 	m_data->m_agentStatus[ownerID].flags = objFlag_active;
+
+	for (i = 0; i < objLimit_ball; ++i)
+	{
+		m_data->m_balls[i].posY = -0;
+		m_data->m_balls[i].velY = -200;
+	}
 }
 
 egpNetPlaygroundGameState::~egpNetPlaygroundGameState()
@@ -122,7 +129,7 @@ int egpNetPlaygroundGameState::ProcessInput(const egpKeyboard *keyboard, const e
 			agentPtr->velY = 0;// agentMoveSpeed * (float)(egpKeyboardKeyIsDown(keyboard, 'w') - egpKeyboardKeyIsDown(keyboard, 's'));
 		//	updatedWhenNotMoving = false;
 			// debug print
-			printf(" vel (%d) = %f, %f \n\n", ctrlID, agentPtr->velX, agentPtr->velY);
+			//printf(" vel (%d) = %f, %f \n\n", ctrlID, agentPtr->velX, agentPtr->velY);
 		}
 		if (mouse)
 		{
@@ -173,6 +180,34 @@ int egpNetPlaygroundGameState::UpdateState(double dt)
 		}
 	}
 
+	NetPlaygroundAgent *ballPtr;
+	//MOVE BALL
+	for (i = 0, ballPtr = m_data->m_balls;
+		i < objLimit_ball;
+		++i, ++ballPtr)
+	{
+			// update bal
+			ballPtr->posY += (float)dt * ballPtr->velY;
+			
+			//if collision (also, if server->send event to clientel)
+			//agent 1 is the dodgerr!!!
+			agentPtr = m_data->m_agent + 1;
+			agentStatusPtr = m_data->m_agentStatus + 1;
+			if (agentStatusPtr->flags & objFlag_active) //not alone single playe
+			{
+				float xDiff = (agentPtr->posX - ballPtr->posX) * (agentPtr->posX - ballPtr->posX);
+				float yDiff = (agentPtr->posY - ballPtr->posY) * (agentPtr->posY - ballPtr->posY);
+				float distance = sqrt(xDiff + yDiff);
+
+				if (distance < 10)
+				{
+					ballPtr->posY = 400;
+					//send collision event here
+				}
+
+			}
+	}
+
 	return 0;
 }
 
@@ -183,4 +218,10 @@ void egpNetPlaygroundGameState::AddAgent(int ID)
 	m_data->m_agent[ID].posY = -200;
 	//m_data->m_agent->posX = 0;
 	//m_data->m_agent->posY = -200;
+}
+
+int egpNetPlaygroundGameState::AddBall(float posX)
+{
+
+	return 0;
 }
