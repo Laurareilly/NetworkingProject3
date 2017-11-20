@@ -119,6 +119,11 @@ int egpNetPlaygroundGameState::DeserializeData(const char *buffer, const unsigne
 
 int egpNetPlaygroundGameState::ProcessInput(const egpKeyboard *keyboard, const egpMouse *mouse, const unsigned int ctrlID, const double dt)
 {
+	if (!gameActive)
+	{
+		return -1;
+	}
+
 	if (ctrlID >= 0)
 	{
 		NetPlaygroundObjectStatus *status = m_data->m_agentStatus + ctrlID;
@@ -159,7 +164,10 @@ int egpNetPlaygroundGameState::UpdateState(double dt)
 //	m_data->m_t += dt;
 //	if (m_data->m_t >= 1.0)
 //		m_data->m_t -= 1.0;
-
+	if (!gameActive)
+	{
+		return -1;
+	}
 	mpEventManager->ExecuteAll();
 
 	// apply movement to all agents
@@ -215,12 +223,24 @@ int egpNetPlaygroundGameState::UpdateState(double dt)
 				float yDiff = (agentPtr->posY - ballPtr->posY) * (agentPtr->posY - ballPtr->posY);
 				float distance = sqrt(xDiff + yDiff);
 
+				bool collisionHappened = false;
+
+				//ball hit the player-- send a collision event and check if the top player wins
 				if (distance < 10)
 				{
-					ballPtr->posY = 400;
-					//send collision event here
-					HitPlayerEvent *hitPlayer = new HitPlayerEvent();
-					mpEventManager->AddEvent(hitPlayer);
+					if (!collisionHappened)
+					{
+						collisionHappened = true;
+						ballPtr->posY = -450;
+						AddScoreEvent *addScore = new AddScoreEvent(&mScore, 1);
+						mpEventManager->AddEvent(addScore);
+
+						if (mScore >= 9)
+						{
+							EndGameEvent *endGame = new EndGameEvent(this);
+							mpEventManager->AddEvent(endGame);
+						}
+					}
 				}
 
 			}

@@ -16,23 +16,51 @@ and/or communicate a copy of this project to a plagiarism
 
 #include "Event.h"
 #include <iostream>
+#include "egpNet/egpGameState.h"
 
-class HitPlayerEvent : public Event
+class AddScoreEvent : public Event
 {
 public:
-	HitPlayerEvent()
+	AddScoreEvent(int *score,  int scoreIncrease)
 	{
-
+		mpScore = score;
+		mScoreIncrease = scoreIncrease;
 	}
 
-	~HitPlayerEvent() { };
+	~AddScoreEvent() { };
 
 	virtual int Execute()
 	{
-		
-	}
-private:
+		*mpScore += mScoreIncrease;
+		printf("score: %i \n", *mpScore);
 
+		return 1;
+	}
+
+private:
+	int *mpScore;
+	int mScoreIncrease;
+};
+
+class EndGameEvent : public Event
+{
+public:
+	EndGameEvent(egpNetPlaygroundGameState* gameState)
+	{
+		mpState = gameState;
+	}
+
+	~EndGameEvent() { };
+
+	virtual int Execute()
+	{
+		printf("game over");
+		mpState->gameActive = false;
+		return 1;
+	}
+
+private:
+	egpNetPlaygroundGameState* mpState;
 };
 
 #endif

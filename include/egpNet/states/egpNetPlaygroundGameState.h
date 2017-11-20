@@ -83,6 +83,7 @@ protected:
 
 public: 
 
+	bool gameActive = true;
 	egpNetPlaygroundGameState(int ownerID);
 	virtual ~egpNetPlaygroundGameState();
 
@@ -96,6 +97,8 @@ public:
 
 	void AddAgent(int ID);
 	int AddBall(float posX);
+
+	int mScore = 0;
 };
 
 
