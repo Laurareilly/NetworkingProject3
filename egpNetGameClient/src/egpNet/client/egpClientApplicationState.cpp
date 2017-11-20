@@ -91,8 +91,17 @@ int egpClientApplicationState::ProcessPacket(const RakNet::Packet *packet)
 			// testing: create game state
 			// normally this would be handled by a manager
 			mp_state = new egpNetPlaygroundGameStateDrawable(m_myConnectionIndex);
+			dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->AddAgent(1, false);
+			
 			
 			return 1;
+			break;
+		case egpID_sendBall:
+			SendBall *sendBall = (SendBall*)packet->data;
+			float tempX = sendBall->posX;
+			int tempID = sendBall->ballID;
+			dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->AddBall(tempX, tempID);
+			break;
 
 			// destroy state if we get disconnected
 		case ID_DISCONNECTION_NOTIFICATION: 
@@ -246,7 +255,7 @@ int egpClientApplicationState::OnKeyPress(unsigned char key)
 			mp_state = new egpNetPlaygroundGameStateDrawable(0); //no connection index because this is local //THIS USED TO BE DRAWABLE INCAS THIS DOESNT WORK
 			m_myConnectionIndex = 0;
 			mp_state->data.isLocal = true;
-			dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->AddAgent(1);
+			dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->AddAgent(1, true);
 		}
 		break;
 	}

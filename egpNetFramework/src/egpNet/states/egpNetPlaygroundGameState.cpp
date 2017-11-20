@@ -55,6 +55,10 @@ egpNetPlaygroundGameState::~egpNetPlaygroundGameState()
 
 int egpNetPlaygroundGameState::SerializeData(char *buffer, const unsigned int bufferCapacity, const unsigned int serializeCount, const double dt) const
 {
+	if (!gameActive)
+	{
+		return -1;
+	}
 	char *const start = buffer;
 	if (buffer)
 	{
@@ -85,6 +89,7 @@ int egpNetPlaygroundGameState::SerializeData(char *buffer, const unsigned int bu
 
 int egpNetPlaygroundGameState::DeserializeData(const char *buffer, const unsigned int bufferCapacity, const unsigned int deserializeCount, const double dt)
 {
+	
 	const char *const start = buffer;
 	if (buffer)
 	{
@@ -144,6 +149,7 @@ int egpNetPlaygroundGameState::ProcessInput(const egpKeyboard *keyboard, const e
 				{
 					//if connected to server, call "spawn ball" event, using AddBall return value for ball ID
 					AddBall(agentPtr->posX);
+
 				}
 			}
 		//	updatedWhenNotMoving = false;
@@ -249,31 +255,46 @@ int egpNetPlaygroundGameState::UpdateState(double dt)
 	return 0;
 }
 
-void egpNetPlaygroundGameState::AddAgent(int ID)
+//better name is ActivateAgentAtID(int)
+//also it's made to move ID 1 down
+void egpNetPlaygroundGameState::AddAgent(int ID, bool isLocal)
 {
-	m_data->m_agentStatus[ID].flags = objFlag_active;
+	if (isLocal)
+		m_data->m_agentStatus[ID].flags = objFlag_active;
 	m_data->m_agent[ID].posX = 0;
 	m_data->m_agent[ID].posY = -200;
 	//m_data->m_agent->posX = 0;
 	//m_data->m_agent->posY = -200;
 }
 
-int egpNetPlaygroundGameState::AddBall(float posX)
+int egpNetPlaygroundGameState::AddBall(float posX, int id)
 {
-	int ballID = -1;
+	int ballID = id;
 
 	int yLimit = -450;
 
 	unsigned int i = 0;
-
-	for (i = 0; i < objLimit_ball; ++i)
+	bool ballIsValid = false;
+	if (id == -1)
 	{
-		if (m_data->m_balls[i].posY < yLimit)
+		for (i = 0; i < objLimit_ball; ++i)
 		{
-			m_data->m_balls[i].posX = posX;
-			m_data->m_balls[i].posY = 0;
-			break;
+			if (m_data->m_balls[i].posY < yLimit)
+			{		
+				ballIsValid = true;
+				break;
+			}
 		}
+	}
+	else
+	{
+		ballIsValid = true;
+	}
+
+	if (ballIsValid)
+	{
+		m_data->m_balls[i].posX = posX;
+		m_data->m_balls[i].posY = 0;
 	}
 
 	return ballID;

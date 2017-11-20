@@ -26,7 +26,7 @@
 
 class egpApplicationState abstract
 {
-protected: 
+protected:
 
 	egpApplicationState();
 	virtual ~egpApplicationState();
@@ -78,8 +78,21 @@ protected:
 		egpID_currentTime,
 		egpID_stateInput,
 		egpID_stateUpdate,
+		egpID_sendBall,
+		egpID_gameOver
 	};
 
+	struct SendBall
+	{
+		char ID;
+		float posX;
+		int ballID;
+	};
+
+	struct GameOver 
+	{
+		char ID;
+	};
 
 	// current game state
 	// this should be contained in a state manager
@@ -125,7 +138,6 @@ public:
 
 	static unsigned short GetDefaultPort();
 	static unsigned short GetUserPort();
-
 };
 
 

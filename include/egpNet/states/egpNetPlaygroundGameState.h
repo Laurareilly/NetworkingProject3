@@ -95,10 +95,12 @@ public:
 	virtual int OnArriveFromPrevious(egpGameState *state) { return 0; };
 	virtual int OnGoToNextState(egpGameState *state) { return 0; };
 
-	void AddAgent(int ID);
-	int AddBall(float posX);
+	void AddAgent(int ID, bool isLocal);
+	int AddBall(float posX, int id = -1);
 
 	int mScore = 0;
+
+	float GetAgentPosition(int ID) { return m_data->m_agent[ID].posX; }
 };
 
 

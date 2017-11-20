@@ -1,4 +1,9 @@
 ﻿  egpNetPlaygroundGameState.cpp
 c:\users\laura.reilly\documents\networkingproject3\egpnetframework\src\egpnet\states\egpnetplaygroundgamestate.cpp(83): warning C4244: 'return': conversion from '__int64' to 'int', possible loss of data
-c:\users\laura.reilly\documents\networkingproject3\egpnetframework\src\egpnet\states\egpnetplaygroundgamestate.cpp(117): warning C4244: 'return': conversion from '__int64' to 'int', possible loss of data
+c:\users\laura.reilly\documents\networkingproject3\egpnetframework\src\egpnet\states\egpnetplaygroundgamestate.cpp(121): warning C4244: 'return': conversion from '__int64' to 'int', possible loss of data
+  Generating Code...
+  Compiling...
+  egpNetPlaygroundGameStateDrawable.cpp
+  Generating Code...
+cl : Command line warning D9028: minimal rebuild failure, reverting to normal build
   egpNetFramework.vcxproj -> C:\Users\laura.reilly\Documents\NetworkingProject3\lib\x64\v140\Debug\egpNetFramework.lib

@@ -105,6 +105,20 @@ int egpServerApplicationState::ProcessPacket(const RakNet::Packet *packet)
 				}
 			} break;
 
+			case egpID_sendBall:
+			{
+				if (mp_state)
+				{
+					float tempX = dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->GetAgentPosition(0);
+					int ball = dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->AddBall(tempX);
+					SendBall sendBall[1] = { egpID_sendBall, tempX, ball };
+
+					SendPacket((char*)sendBall, sizeof(sendBall), -1, 0, 1);
+
+				}
+			}
+				break;
+
 			case 0:
 				printf("No data. \n\n");
 				break;
