@@ -112,12 +112,48 @@ int egpServerApplicationState::ProcessPacket(const RakNet::Packet *packet)
 					float tempX = dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->GetAgentPosition(0);
 					int ball = dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->AddBall(tempX);
 					SendBall sendBall[1] = { egpID_sendBall, tempX, ball };
+					const unsigned int timeStampHeadSz = 2 * sizeof(char) + sizeof(int) + 4 * sizeof(RakNet::Time);
+					//SendPacket((char*)sendBall, sizeof(sendBall), -1, 0, 1);
 
-					SendPacket((char*)sendBall, sizeof(sendBall), -1, 0, 1);
+					const RakNet::Time packetTime_local = RakNet::GetTime();
+					char msg[64], *msgPtrTmp = msg + WriteTimeStamp(msg, packetTime_local, packetTime_local),
+						*msgPtr = msgPtrTmp + WriteTimeStamp(msgPtrTmp, 0, 0);
+					*msgPtrTmp = (char)egpID_sendBall;
+
+					*((float *)msgPtr) = tempX;
+					msgPtr += sizeof(tempX);
+					*((int *)msgPtr) = ball;
+					msgPtr += sizeof(ball);
+
+				/*	*((SendBall *)msgPtr) = *sendBall;
+					msgPtr += sizeof(SendBall);*/
+
+					/**msg = egpID_sendBall;
+					msg += sizeof(char);*/
+					/*memcpy(msg, &tempX, sizeof(float));
+					msg += sizeof(float);
+					memcpy(msg, &ball, sizeof(int));
+					msg += sizeof(int);*/
+
+				//	SendPacket(msg, (int)(msgPtr - msg), m_maxIncomingConnections, 0, 0);
+					SendPacket(msg, (int)(msgPtr - msg), m_maxIncomingConnections, 1, 0);
+				//	SendPacket(msg, (int)(msgPtr - msg), -1, 0, 0);
+				//	SendPacket(msg, (int)(msgPtr - msg), -1, 1, 0);
+				//	SendPacket(msg, (int)(msgPtr - msg), -1, 1, 1);
+				//	SendPacket(msg, (int)(msgPtr - msg), -1, 0, 1);
+
+					//SendPacket(msg, (int)(msgPtr - msg), m_maxIncomingConnections, 0, 0);
+					printf(" sent ball message at time %I64d \n\n", packetTime_local);
 
 				}
 			}
 				break;
+
+			case egpID_serverGetBallRequest:
+			{
+				printf("dan");
+			}
+			break;
 
 			case 0:
 				printf("No data. \n\n");

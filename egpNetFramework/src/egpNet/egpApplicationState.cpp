@@ -193,7 +193,7 @@ int egpApplicationState::SendPacket(const char *buffer, const unsigned int buffe
 		// send raw data
 		return mp_peer->Send(buffer, bufferLength, priorityFlag, reliableFlag, 0, address, broadcastFlag);
 	}
-	return 0;
+	return -25;
 }
 
 int egpApplicationState::SendPacket(const RakNet::BitStream *bs, const int connectionIndex, const int broadcast, const int reliable) const

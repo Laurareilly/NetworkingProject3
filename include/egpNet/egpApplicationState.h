@@ -79,7 +79,8 @@ protected:
 		egpID_stateInput,
 		egpID_stateUpdate,
 		egpID_sendBall,
-		egpID_gameOver
+		egpID_gameOver,
+		egpID_serverGetBallRequest,
 	};
 
 	struct SendBall

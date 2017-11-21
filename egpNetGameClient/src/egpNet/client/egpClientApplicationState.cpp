@@ -62,6 +62,19 @@ int egpClientApplicationState::ProcessPacket(const RakNet::Packet *packet)
 				//printf(" Other (%d) -> Server = %I64d;  Server -> Local (%d) = %I64d \n\n", otherID, sentToReadDiff_remote, m_myConnectionIndex, sentToReadDiff_local);
 			}	break;
 
+			case egpID_sendBall:
+			{
+				RakNet::Time sentToReadDiff_remote, sentToReadDiff_other;
+				userData += ReadTimeStamp((char *)userData, sentToReadDiff_remote, sentToReadDiff_other);
+				int otherID = *((int *)userData);
+
+				SendBall *sendBall = (SendBall*)userData;
+				float tempX = sendBall->posX;
+				int tempID = sendBall->ballID;
+				dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->AddBall(tempX, tempID);
+			}
+			break;
+
 			case egpID_stateUpdate: {
 				RakNet::Time sentToReadDiff_remote, sentToReadDiff_other;
 				userData += ReadTimeStamp((char *)userData, sentToReadDiff_remote, sentToReadDiff_other);
@@ -78,6 +91,12 @@ int egpClientApplicationState::ProcessPacket(const RakNet::Packet *packet)
 					userData += mp_state->DeserializeData((char*)userData, 4096, 0, delay_s);
 				}
 			}	break;
+
+			case egpID_serverGetBallRequest:
+			{
+				printf("dan");
+			}
+			break;
 
 			case 0:
 				printf("No data. \n\n");
@@ -100,14 +119,16 @@ int egpClientApplicationState::ProcessPacket(const RakNet::Packet *packet)
 			return 1;
 		}
 			break;
-		case egpID_sendBall:
-		{
-			SendBall *sendBall = (SendBall*)packet->data;
-			float tempX = sendBall->posX;
-			int tempID = sendBall->ballID;
-			dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->AddBall(tempX, tempID);
-			break;
-		}
+
+		//case egpID_sendBall:
+		//{
+		//	SendBall *sendBall = (SendBall*)packet->data;
+		//	float tempX = sendBall->posX;
+		//	int tempID = sendBall->ballID;
+		//	dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->AddBall(tempX, tempID);
+		//}
+		//break;
+
 			// destroy state if we get disconnected
 		case ID_DISCONNECTION_NOTIFICATION: 
 		case ID_CONNECTION_LOST:
@@ -288,11 +309,20 @@ void egpClientApplicationState::SendTheBall(float position, int ID)
 
 		//GameOver sendBallLol[1] = { egpID_sendBall };
 		//SendPacket((char*)sendBallLol, sizeof(sendBallLol), -1, 1, 1);
+		const RakNet::Time packetTime_local = RakNet::GetTime();
+		char msg[64], *msgPtrTmp = msg + WriteTimeStamp(msg, packetTime_local, packetTime_local),
+			*msgPtr = msgPtrTmp + WriteTimeStamp(msgPtrTmp, 0, 0);
+		*msgPtrTmp = (char)egpID_sendBall;
+		//*((int *)msgPtr) = m_myConnectionIndex;
+		//msgPtr += sizeof(m_myConnectionIndex);
 
-		SendBall sendBall[1] = { egpID_sendBall };
-		sendBall->ballID = ID;
-		sendBall->posX = position;
-		SendPacket((char*)sendBall, sizeof(sendBall), -1, 1, 1);
+		SendPacket(msg, (int)(msgPtr - msg), m_maxIncomingConnections, 0, 0);
+		//printf(" Sent ball message at time %I64d \n\n", packetTime_local);
+
+		//SendBall sendBall[1] = { egpID_serverGetBallRequest };
+		//sendBall->ballID = ID;
+		//sendBall->posX = position;
+		//int didItSend = SendPacket((char*)sendBall, sizeof(sendBall), 1, 0, 0);
 
 		sentBallThisFrame = true;
 	}
