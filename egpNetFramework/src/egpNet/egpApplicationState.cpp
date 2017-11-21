@@ -573,3 +573,8 @@ unsigned short egpApplicationState::GetUserPort()
 	fscanf(stdin, "%hu", &portOffset);
 	return (GetDefaultPort() + portOffset);
 }
+
+void egpApplicationState::SendTheBall(float position, int ID)
+{
+	printf("dan fix this");
+}

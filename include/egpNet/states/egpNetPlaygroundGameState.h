@@ -12,6 +12,9 @@
 
 #include "egpNet/egpGameState.h"
 #include "egpNet\events\Event.h"
+#include "egpNet\egpApplicationState.h"
+
+class egpClientApplicationState;
 
 
 class egpNetPlaygroundGameState : public egpGameState
@@ -35,6 +38,8 @@ class egpNetPlaygroundGameState : public egpGameState
 	EventManager *mpEventManager;
 
 protected:
+
+	int sentBallID = -1;
 
 	bool updatedWhenNotMoving = false;
 
@@ -101,6 +106,9 @@ public:
 	int mScore = 0;
 
 	float GetAgentPosition(int ID) { return m_data->m_agent[ID].posX; }
+
+	egpApplicationState* clientState;
+	void SetAppState(egpApplicationState * cState);
 };
 
 

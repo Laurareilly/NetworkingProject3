@@ -12,8 +12,10 @@
 
 
 #include "egpNet/egpApplicationState.h"
-#include "egpNet/client/egpWindowState.h"
+//#include "egpNet/client/egpWindowState.h"
 
+
+class egpWindowState;
 
 class egpClientApplicationState : public egpApplicationState
 {
@@ -44,6 +46,9 @@ public:
 
 	// set window state
 	void SetWindowState(const egpWindowState *windowState);
+
+	void SendTheBall(float position, int ID);
+	void SendEmptyMessage(int ID);
 
 };
 

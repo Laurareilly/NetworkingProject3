@@ -1,3 +1,8 @@
 ﻿  egpClientApplicationState.cpp
-  egpNetGameClient.vcxproj -> C:\Users\laura.reilly\Documents\NetworkingProject3\bin\x64\v140\Debug\egpNetGameClient.exe
-  egpNetGameClient.vcxproj -> C:\Users\laura.reilly\Documents\NetworkingProject3\bin\x64\v140\Debug\egpNetGameClient.pdb (Full PDB)
+c:\users\laura.reilly\desktop\networkingproject3\egpnetgameclient\include\egpnet\client\egpwindowstate.h(21): warning C4099: 'egpWindowState': type name first seen using 'class' now seen using 'struct'
+  c:\users\laura.reilly\desktop\networkingproject3\egpnetgameclient\include\egpnet\client\egpwindowstate.h(20): note: see declaration of 'egpWindowState'
+c:\users\laura.reilly\desktop\networkingproject3\egpnetgameclient\src\egpnet\client\egpclientapplicationstate.cpp(286): warning C4838: conversion from 'egpApplicationState::me_PacketIdentifier' to 'char' requires a narrowing conversion
+c:\users\laura.reilly\desktop\networkingproject3\egpnetgameclient\src\egpnet\client\egpclientapplicationstate.cpp(286): warning C4305: 'initializing': truncation from 'egpApplicationState::me_PacketIdentifier' to 'char'
+c:\users\laura.reilly\desktop\networkingproject3\egpnetgameclient\src\egpnet\client\egpclientapplicationstate.cpp(286): warning C4309: 'initializing': truncation of constant value
+  egpNetGameClient.vcxproj -> C:\Users\laura.reilly\Desktop\NetworkingProject3\bin\x64\v140\Debug\egpNetGameClient.exe
+  egpNetGameClient.vcxproj -> C:\Users\laura.reilly\Desktop\NetworkingProject3\bin\x64\v140\Debug\egpNetGameClient.pdb (Full PDB)

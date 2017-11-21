@@ -35,6 +35,7 @@ public:
 		char doesUpdateState;
 		char doesUpdateNetworking;
 		char enterServer;
+		
 	}data;
 
 	// virtual dtor

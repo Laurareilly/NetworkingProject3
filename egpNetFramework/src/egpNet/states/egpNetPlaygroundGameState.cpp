@@ -15,13 +15,16 @@
 #include <string.h>
 #include <cmath>
 #include "egpNet\events\MyEvents.h"
+#include "../egpNetGameClient/include/egpNet/client/egpClientApplicationState.h"
+
+
 
 
 egpNetPlaygroundGameState::egpNetPlaygroundGameState(int ownerID)
 	: egpGameState(ownerID)
 {
 	mpEventManager = new EventManager();
-
+	//clientState = nullptr;
 	memset(m_data, 0, sizeof(m_data));
 
 
@@ -148,7 +151,20 @@ int egpNetPlaygroundGameState::ProcessInput(const egpKeyboard *keyboard, const e
 				if (egpKeyboardKeyIsDown(keyboard, 's'))
 				{
 					//if connected to server, call "spawn ball" event, using AddBall return value for ball ID
-					AddBall(agentPtr->posX);
+					
+					if (!data.isLocal)
+					{
+						if (clientState == nullptr)
+						{
+							printf("darn");
+						}
+						int tempBallID = AddBall(agentPtr->posX);
+						sentBallID = tempBallID;
+					}
+					else
+					{
+						AddBall(agentPtr->posX);
+					}
 
 				}
 			}
@@ -174,6 +190,13 @@ int egpNetPlaygroundGameState::UpdateState(double dt)
 	{
 		return -1;
 	}
+
+	if (sentBallID != -1)
+	{
+		clientState->SendTheBall(m_data->m_agent[0].posX, sentBallID);
+		sentBallID = -1;
+	}
+
 	mpEventManager->ExecuteAll();
 
 	// apply movement to all agents
@@ -282,6 +305,7 @@ int egpNetPlaygroundGameState::AddBall(float posX, int id)
 			if (m_data->m_balls[i].posY < yLimit)
 			{		
 				ballIsValid = true;
+				ballID = i;
 				break;
 			}
 		}
@@ -299,3 +323,13 @@ int egpNetPlaygroundGameState::AddBall(float posX, int id)
 
 	return ballID;
 }
+
+void egpNetPlaygroundGameState::SetAppState(egpApplicationState *cState)
+{
+	clientState = cState;
+}
+
+//void egpNetPlaygroundGameState::SetAppState(egpClientApplicationState * cState)
+//{
+//	clientState = cState;
+//}

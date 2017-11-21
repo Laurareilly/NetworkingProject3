@@ -138,6 +138,8 @@ public:
 
 	static unsigned short GetDefaultPort();
 	static unsigned short GetUserPort();
+
+	virtual void SendTheBall(float position, int ID);
 };
 
 

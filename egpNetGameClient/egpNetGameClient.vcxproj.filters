@@ -16,25 +16,25 @@
     <Filter Include="Source Files\egpNet">
       <UniqueIdentifier>{b3cb220a-fa8a-427b-be5a-e34d9e26e60b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\egpNet\client">
-      <UniqueIdentifier>{b34f970a-5545-4948-ba5d-7a110d372d6b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\egpNet">
       <UniqueIdentifier>{1a084b32-da2c-49be-936e-20d3602ba259}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\egpNet\client">
       <UniqueIdentifier>{d951961c-d856-423d-91b0-960569f48012}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\client">
+      <UniqueIdentifier>{b34f970a-5545-4948-ba5d-7a110d372d6b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\egpNet\client\egpWindowState.c">
-      <Filter>Source Files\egpNet\client</Filter>
+      <Filter>Source Files\client</Filter>
     </ClCompile>
     <ClCompile Include="src\egpNet\client\egpImageLibraryWrapper.c">
-      <Filter>Source Files\egpNet\client</Filter>
+      <Filter>Source Files\client</Filter>
     </ClCompile>
     <ClCompile Include="src\egpNet\client\egpClientApplicationState.cpp">
-      <Filter>Source Files\egpNet\client</Filter>
+      <Filter>Source Files\client</Filter>
     </ClCompile>
     <ClCompile Include="src\egpNetGameClient_main.cpp">
       <Filter>Source Files</Filter>

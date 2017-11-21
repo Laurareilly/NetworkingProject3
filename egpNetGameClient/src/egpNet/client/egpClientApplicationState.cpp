@@ -14,6 +14,7 @@
 
 #include "egpNet/states/egpNetPlaygroundGameStateDrawable.h"
 
+#include "egpNet/client/egpWindowState.h"
 
 
 // internal updates
@@ -88,21 +89,25 @@ int egpClientApplicationState::ProcessPacket(const RakNet::Packet *packet)
 
 			// create state after receiving connection index
 		case egpID_connectionIndex:
+		{
 			// testing: create game state
 			// normally this would be handled by a manager
 			mp_state = new egpNetPlaygroundGameStateDrawable(m_myConnectionIndex);
 			dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->AddAgent(1, false);
-			
-			
+			dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->SetAppState(this);
+
+
 			return 1;
+		}
 			break;
 		case egpID_sendBall:
+		{
 			SendBall *sendBall = (SendBall*)packet->data;
 			float tempX = sendBall->posX;
 			int tempID = sendBall->ballID;
 			dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->AddBall(tempX, tempID);
 			break;
-
+		}
 			// destroy state if we get disconnected
 		case ID_DISCONNECTION_NOTIFICATION: 
 		case ID_CONNECTION_LOST:
@@ -272,4 +277,21 @@ void egpClientApplicationState::SetWindowState(const egpWindowState *windowState
 {
 	if (windowState->userData == this)
 		mpk_windowState = windowState;
+}
+
+void egpClientApplicationState::SendTheBall(float position, int ID)
+{
+	if (ID == -1) return;
+
+	//GameOver sendBallLol[1] = { egpID_sendBall };
+	//SendPacket((char*)sendBallLol, sizeof(sendBallLol), -1, 1, 1);
+
+	SendBall sendBall[1] = { egpID_sendBall };
+	sendBall->ballID = ID;
+	sendBall->posX = position;
+	SendPacket((char*)sendBall, sizeof(sendBall), -1, 1, 1);
+}
+
+void egpClientApplicationState::SendEmptyMessage(int ID)
+{
 }
