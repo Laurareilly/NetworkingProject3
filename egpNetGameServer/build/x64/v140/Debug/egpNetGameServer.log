@@ -1,2 +1,6 @@
-﻿  egpNetGameServer.vcxproj -> C:\Users\laura.reilly\Desktop\NetworkingProject3\bin\x64\v140\Debug\egpNetGameServer.exe
+﻿  egpServerApplicationState.cpp
+c:\users\laura.reilly\desktop\networkingproject3\egpnetgameserver\src\egpnet\server\egpserverapplicationstate.cpp(114): warning C4838: conversion from 'egpApplicationState::me_PacketIdentifier' to 'char' requires a narrowing conversion
+c:\users\laura.reilly\desktop\networkingproject3\egpnetgameserver\src\egpnet\server\egpserverapplicationstate.cpp(114): warning C4305: 'initializing': truncation from 'egpApplicationState::me_PacketIdentifier' to 'char'
+c:\users\laura.reilly\desktop\networkingproject3\egpnetgameserver\src\egpnet\server\egpserverapplicationstate.cpp(114): warning C4309: 'initializing': truncation of constant value
+  egpNetGameServer.vcxproj -> C:\Users\laura.reilly\Desktop\NetworkingProject3\bin\x64\v140\Debug\egpNetGameServer.exe
   egpNetGameServer.vcxproj -> C:\Users\laura.reilly\Desktop\NetworkingProject3\bin\x64\v140\Debug\egpNetGameServer.pdb (Full PDB)

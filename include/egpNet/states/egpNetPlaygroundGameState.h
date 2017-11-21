@@ -106,6 +106,7 @@ public:
 	int AddBall(float posX, int id = -1);
 
 	int mScore = 0;
+	float agentXUpdated = 0;
 
 	float GetAgentPosition(int ID) { return m_data->m_agent[ID].posX; }
 
