@@ -186,6 +186,7 @@ int egpClientApplicationState::OnIdle()
 			mp_state->ProcessInput(m_keyboard, m_mouse, m_myConnectionIndex, 0.0);
 
 			// ****TO-DO: update state
+			sentBallThisFrame = false;
 			mp_state->UpdateState(m_updateRenderTimer->secondsPerTick); 
 		}
 
@@ -281,15 +282,20 @@ void egpClientApplicationState::SetWindowState(const egpWindowState *windowState
 
 void egpClientApplicationState::SendTheBall(float position, int ID)
 {
-	if (ID == -1) return;
+	if (!sentBallThisFrame)
+	{
+		if (ID == -1) return;
 
-	//GameOver sendBallLol[1] = { egpID_sendBall };
-	//SendPacket((char*)sendBallLol, sizeof(sendBallLol), -1, 1, 1);
+		//GameOver sendBallLol[1] = { egpID_sendBall };
+		//SendPacket((char*)sendBallLol, sizeof(sendBallLol), -1, 1, 1);
 
-	SendBall sendBall[1] = { egpID_sendBall };
-	sendBall->ballID = ID;
-	sendBall->posX = position;
-	SendPacket((char*)sendBall, sizeof(sendBall), -1, 1, 1);
+		SendBall sendBall[1] = { egpID_sendBall };
+		sendBall->ballID = ID;
+		sendBall->posX = position;
+		SendPacket((char*)sendBall, sizeof(sendBall), -1, 1, 1);
+
+		sentBallThisFrame = true;
+	}
 }
 
 void egpClientApplicationState::SendEmptyMessage(int ID)

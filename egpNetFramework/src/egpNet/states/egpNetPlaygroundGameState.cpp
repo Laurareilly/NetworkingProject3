@@ -148,24 +148,28 @@ int egpNetPlaygroundGameState::ProcessInput(const egpKeyboard *keyboard, const e
 
 			if (status->ownerID == 0)
 			{
+				cooldownBall--;
 				if (egpKeyboardKeyIsDown(keyboard, 's'))
 				{
 					//if connected to server, call "spawn ball" event, using AddBall return value for ball ID
 					
-					if (!data.isLocal)
+					if (cooldownBall <= 0)
 					{
-						if (clientState == nullptr)
+						if (!data.isLocal)
 						{
-							printf("darn");
+							if (clientState == nullptr)
+							{
+								printf("darn");
+							}
+							int tempBallID = AddBall(agentPtr->posX);
+							sentBallID = tempBallID;
 						}
-						int tempBallID = AddBall(agentPtr->posX);
-						sentBallID = tempBallID;
+						else
+						{
+							AddBall(agentPtr->posX);
+						}
+						cooldownBall = 5;
 					}
-					else
-					{
-						AddBall(agentPtr->posX);
-					}
-
 				}
 			}
 		//	updatedWhenNotMoving = false;

@@ -32,6 +32,7 @@ class egpClientApplicationState : public egpApplicationState
 
 	virtual int UpdateDisplay();
 
+	bool sentBallThisFrame;
 
 public: 
 
@@ -49,6 +50,7 @@ public:
 
 	void SendTheBall(float position, int ID);
 	void SendEmptyMessage(int ID);
+
 
 };
 

@@ -86,6 +86,8 @@ protected:
 
 	} m_data[1];
 
+	int cooldownBall = 0;
+
 public: 
 
 	bool gameActive = true;

@@ -165,6 +165,7 @@ egpServerApplicationState::egpServerApplicationState()
 	// testing: create game state
 	// normally this would be handled by a manager
 	mp_state = new egpNetPlaygroundGameState(-1);
+	dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->clientState = this;
 }
 
 egpServerApplicationState::~egpServerApplicationState()
