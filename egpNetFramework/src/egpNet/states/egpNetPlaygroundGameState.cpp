@@ -164,7 +164,7 @@ int egpNetPlaygroundGameState::ProcessInput(const egpKeyboard *keyboard, const e
 							//int tempBallID = AddBall(agentPtr->posX);
 							int tempBallID = AddBall(agentXUpdated);
 							sentBallID = tempBallID;
-							printf("Sending ball at x position: %d\n", agentPtr->posX); //so this is coming out at 0 no matter where we are
+							printf("Sending ball at x position: %d\n", agentXUpdated); //so this is coming out at 0 no matter where we are
 						}
 						else
 						{
@@ -222,8 +222,9 @@ int egpNetPlaygroundGameState::UpdateState(double dt)
 
 			// update agent
 			agentPtr->posX += (float)dt * agentPtr->velX;
-			agentXUpdated += (float)dt * agentPtr->velX;
-			printf("Pos x: %d\n", agentPtr->posX); //when the agent stops moving, his position is reset to zero somehow no matter where he is
+			agentXUpdated = m_data->m_agent[0].posX;
+
+			printf("Pos x: %d\n", agentXUpdated); //when the agent stops moving, his position is reset to zero somehow no matter where he is
 			//agentPtr->velY = 0; //For some reason if we don't do this, we can't move left or right at all
 			agentPtr->posY += (float)dt * agentPtr->velY;
 
@@ -254,6 +255,7 @@ int egpNetPlaygroundGameState::UpdateState(double dt)
 			
 			//if collision (also, if server->send event to clientel)
 			//agent 1 is the dodgerr!!!
+			
 			agentPtr = m_data->m_agent + 1;
 			agentStatusPtr = m_data->m_agentStatus + 1;
 			if (agentStatusPtr->flags & objFlag_active) //not alone single playe

@@ -135,14 +135,7 @@ int egpServerApplicationState::ProcessPacket(const RakNet::Packet *packet)
 					memcpy(msg, &ball, sizeof(int));
 					msg += sizeof(int);*/
 
-				//	SendPacket(msg, (int)(msgPtr - msg), m_maxIncomingConnections, 0, 0);
 					SendPacket(msg, (int)(msgPtr - msg), m_maxIncomingConnections, 1, 0);
-				//	SendPacket(msg, (int)(msgPtr - msg), -1, 0, 0);
-				//	SendPacket(msg, (int)(msgPtr - msg), -1, 1, 0);
-				//	SendPacket(msg, (int)(msgPtr - msg), -1, 1, 1);
-				//	SendPacket(msg, (int)(msgPtr - msg), -1, 0, 1);
-
-					//SendPacket(msg, (int)(msgPtr - msg), m_maxIncomingConnections, 0, 0);
 					printf(" sent ball message at time %I64d \n\n", packetTime_local);
 
 				}
