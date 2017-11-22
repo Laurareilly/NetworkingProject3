@@ -76,7 +76,7 @@ int egpClientApplicationState::ProcessPacket(const RakNet::Packet *packet)
 
 				if (tempID < 0 || tempID > 2)
 				{
-					return 0; //DEBUG, why would we get a SHITE id???
+					return 0; //DEBUG, why would we get a brrroken id???
 				}
 
 				/*SendBall *sendBall = (SendBall*)userData;
@@ -116,7 +116,7 @@ int egpClientApplicationState::ProcessPacket(const RakNet::Packet *packet)
 
 				if (tempID < 0 || tempID > 2)
 				{
-					return 0; //DEBUG, why would we get a SHITE id???
+					return 0; //DEBUG, why would we get a broken id???
 				}
 
 				/*SendBall *sendBall = (SendBall*)userData;
@@ -124,40 +124,42 @@ int egpClientApplicationState::ProcessPacket(const RakNet::Packet *packet)
 				int tempID = sendBall->ballID;*/
 				dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->AddBall(tempX, tempID);
 			}
+			break;
 
 			case egpID_gameOver:
 			{
 				printf("game over");
 				RakNet::Time sentToReadDiff_remote, sentToReadDiff_other;
 				userData += ReadTimeStamp((char *)userData, sentToReadDiff_remote, sentToReadDiff_other);
-				int otherID = *((int *)userData);
+				/*int otherID = *((int *)userData);
 
 				int tempID = *((int *)userData);
-				userData += sizeof(int);
+				userData += sizeof(int);*/
 
-				if (tempID < 0 || tempID > 2)
-				{
-					return 0; //DEBUG, why would we get a SHITE id???
-				}
+				//if (tempID < 0 || tempID > 2)
+				//{
+				//	return 0; //DEBUG, why would we get a SHITE id???
+				//}
 
-				//EndGameEvent *endGame = new EndGameEvent(dynamic_cast<egpNetPlaygroundGameState*>(mp_state));
-				//dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->mpEventManager->AddEvent(endGame);
+				EndGameEvent *endGame = new EndGameEvent(dynamic_cast<egpNetPlaygroundGameState*>(mp_state));
+				dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->mpEventManager->AddEvent(endGame);
 			}
+			break;
 
 			case egpID_resetGame:
 			{
-				printf("game over");
+				printf("reset game");
 				RakNet::Time sentToReadDiff_remote, sentToReadDiff_other;
 				userData += ReadTimeStamp((char *)userData, sentToReadDiff_remote, sentToReadDiff_other);
-				int otherID = *((int *)userData);
+				//int otherID = *((int *)userData);
 
-				int tempID = *((int *)userData);
-				userData += sizeof(int);
+				//int tempID = *((int *)userData);
+				//userData += sizeof(int);
 
-				if (tempID < 0 || tempID > 2)
-				{
-					return 0; //DEBUG, why would we get a SHITE id???
-				}
+				//if (tempID < 0 || tempID > 2)
+				//{
+				//	return 0; //DEBUG, why would we get a SHITE id???
+				//}
 
 				dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->ResetGame();
 			}

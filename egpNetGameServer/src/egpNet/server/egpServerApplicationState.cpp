@@ -13,7 +13,7 @@
 
 
 #include "egpNet/states/egpNetPlaygroundGameState.h"
-
+#include "egpNet/events/MyEvents.h"
 
 // internal updates
 int egpServerApplicationState::UpdateNetworking()
@@ -155,8 +155,9 @@ int egpServerApplicationState::ProcessPacket(const RakNet::Packet *packet)
 
 			case egpID_serverGetBallRequest:
 			{
-				printf("dan");
+				printf("dang");
 			}
+			break;
 
 			case egpID_gameOver:
 			{
@@ -176,11 +177,13 @@ int egpServerApplicationState::ProcessPacket(const RakNet::Packet *packet)
 
 					//	*((int *)msgPtr) = ball;
 					//	msgPtr += sizeof(ball);
-
+					EndGameEvent *endGame = new EndGameEvent(dynamic_cast<egpNetPlaygroundGameState*>(mp_state));
+					dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->mpEventManager->AddEvent(endGame);
 					SendPacket(msg, (int)(msgPtr - msg), m_maxIncomingConnections, 1, 0);
 				}
 			}
 				break;
+				
 			case egpID_resetGame:
 			{
 				printf("reset game");
@@ -197,6 +200,7 @@ int egpServerApplicationState::ProcessPacket(const RakNet::Packet *packet)
 						*msgPtr = msgPtrTmp + WriteTimeStamp(msgPtrTmp, 0, 0);
 					*msgPtrTmp = (char)egpID_resetGame;
 
+					dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->ResetGame();
 					SendPacket(msg, (int)(msgPtr - msg), m_maxIncomingConnections, 1, 0);
 				}
 			}

@@ -193,7 +193,7 @@ int egpNetPlaygroundGameState::ProcessInput(const egpKeyboard *keyboard, const e
 							//int tempBallID = AddBall(agentPtr->posX);
 							int tempBallID = AddBall(agentXUpdated);
 							sentBallID = tempBallID;
-							printf("Sending ball at x position: %d\n", agentXUpdated); //so this is coming out at 0 no matter where we are
+							printf("Sending ball at x position: %f\n", agentXUpdated); //so this is coming out at 0 no matter where we are
 						}
 						else
 						{

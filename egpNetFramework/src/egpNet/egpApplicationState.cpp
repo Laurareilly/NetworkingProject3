@@ -576,15 +576,15 @@ unsigned short egpApplicationState::GetUserPort()
 
 void egpApplicationState::SendTheBall(float position, int ID)
 {
-	printf("dan fix this");
+	printf("we fixed this\n");
 }
 
 void egpApplicationState::SendResetGame(int ID)
 {
-	printf("reset the game");
+	printf("reset the game\n");
 }
 
 void egpApplicationState::SendGameOver(int ID)
 {
-	printf("game over");
+	printf("game over\n");
 }
