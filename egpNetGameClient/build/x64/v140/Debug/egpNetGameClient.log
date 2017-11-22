@@ -1,5 +1,2 @@
-﻿  egpClientApplicationState.cpp
-c:\users\robby mitchell\desktop\schoolrepos\networkproject3\egpnetgameclient\include\egpnet\client\egpwindowstate.h(21): warning C4099: 'egpWindowState': type name first seen using 'class' now seen using 'struct'
-  c:\users\robby mitchell\desktop\schoolrepos\networkproject3\egpnetgameclient\include\egpnet\client\egpwindowstate.h(20): note: see declaration of 'egpWindowState'
-  egpNetGameClient.vcxproj -> C:\Users\Robby Mitchell\Desktop\SchoolRepos\NetworkProject3\bin\x64\v140\Debug\egpNetGameClient.exe
+﻿  egpNetGameClient.vcxproj -> C:\Users\Robby Mitchell\Desktop\SchoolRepos\NetworkProject3\bin\x64\v140\Debug\egpNetGameClient.exe
   egpNetGameClient.vcxproj -> C:\Users\Robby Mitchell\Desktop\SchoolRepos\NetworkProject3\bin\x64\v140\Debug\egpNetGameClient.pdb (Full PDB)

@@ -169,7 +169,7 @@ int egpNetPlaygroundGameState::ProcessInput(const egpKeyboard *keyboard, const e
 
 			if (data.isLocal)
 			{
-				m_data->m_agent[1].velX = agentMoveSpeed * (float)(egpKeyboardKeyIsDown(keyboard, 'j') - egpKeyboardKeyIsDown(keyboard, 'l'));
+				m_data->m_agent[1].velX = agentMoveSpeed * (float)(egpKeyboardKeyIsDown(keyboard, 'l') - egpKeyboardKeyIsDown(keyboard, 'j'));
 				//agentPtr->velX = agentMoveSpeed * (float)(egpKeyboardKeyIsDown(keyboard, 'j') - egpKeyboardKeyIsDown(keyboard, 'l'));
 			}
 
