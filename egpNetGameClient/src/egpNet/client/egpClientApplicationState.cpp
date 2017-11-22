@@ -68,9 +68,19 @@ int egpClientApplicationState::ProcessPacket(const RakNet::Packet *packet)
 				userData += ReadTimeStamp((char *)userData, sentToReadDiff_remote, sentToReadDiff_other);
 				int otherID = *((int *)userData);
 
-				SendBall *sendBall = (SendBall*)userData;
+				float tempX = *((float *)userData);
+				userData += sizeof(float);
+				int tempID = *((int *)userData);
+				userData += sizeof(int);
+
+				if (tempID < 0 || tempID > 2)
+				{
+					return 0; //DEBUG, why would we get a SHITE id???
+				}
+
+				/*SendBall *sendBall = (SendBall*)userData;
 				float tempX = sendBall->posX;
-				int tempID = sendBall->ballID;
+				int tempID = sendBall->ballID;*/
 				dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->AddBall(tempX, tempID);
 			}
 			break;
@@ -301,6 +311,7 @@ void egpClientApplicationState::SetWindowState(const egpWindowState *windowState
 		mpk_windowState = windowState;
 }
 
+//WE WILL SEND A REQUEST TO SPAWN BALL OF ID "ID". THE SERVER WILL USE ITS ESTIMATION OF OUR POSITION TO SPAWN THE BALL AT THAT ID NUMBER ON ALL CLIENTS.
 void egpClientApplicationState::SendTheBall(float position, int ID)
 {
 	if (!sentBallThisFrame)
@@ -313,8 +324,8 @@ void egpClientApplicationState::SendTheBall(float position, int ID)
 		char msg[64], *msgPtrTmp = msg + WriteTimeStamp(msg, packetTime_local, packetTime_local),
 			*msgPtr = msgPtrTmp + WriteTimeStamp(msgPtrTmp, 0, 0);
 		*msgPtrTmp = (char)egpID_sendBall;
-		//*((int *)msgPtr) = m_myConnectionIndex;
-		//msgPtr += sizeof(m_myConnectionIndex);
+		*((int *)msgPtr) = ID;
+		msgPtr += sizeof(ID);
 
 		SendPacket(msg, (int)(msgPtr - msg), m_maxIncomingConnections, 0, 0);
 		//printf(" Sent ball message at time %I64d \n\n", packetTime_local);

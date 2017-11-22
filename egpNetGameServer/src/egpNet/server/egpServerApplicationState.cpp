@@ -109,8 +109,14 @@ int egpServerApplicationState::ProcessPacket(const RakNet::Packet *packet)
 			{
 				if (mp_state)
 				{
+					RakNet::Time sentToReadDiff_remote, sentToReadDiff_other;
+					userData += ReadTimeStamp((char *)userData, sentToReadDiff_remote, sentToReadDiff_other);
 					float tempX = dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->GetAgentPosition(0);
-					int ball = dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->AddBall(tempX);
+					int tempID = *((int *)userData);
+					userData += sizeof(int);
+					
+					//ball should 100% equal tempID, this is to check if im networking right
+					int ball = dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->AddBall(tempX, tempID);
 					SendBall sendBall[1] = { egpID_sendBall, tempX, ball };
 					const unsigned int timeStampHeadSz = 2 * sizeof(char) + sizeof(int) + 4 * sizeof(RakNet::Time);
 					//SendPacket((char*)sendBall, sizeof(sendBall), -1, 0, 1);
@@ -195,6 +201,8 @@ egpServerApplicationState::egpServerApplicationState()
 	// normally this would be handled by a manager
 	mp_state = new egpNetPlaygroundGameState(-1);
 	dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->clientState = this;
+	dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->AddAgent(1, false);
+
 }
 
 egpServerApplicationState::~egpServerApplicationState()

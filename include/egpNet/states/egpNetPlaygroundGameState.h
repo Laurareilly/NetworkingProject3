@@ -39,6 +39,7 @@ class egpNetPlaygroundGameState : public egpGameState
 
 protected:
 
+	int myID = -1;
 	int sentBallID = -1;
 
 	bool updatedWhenNotMoving = false;

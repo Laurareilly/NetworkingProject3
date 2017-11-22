@@ -26,7 +26,7 @@ egpNetPlaygroundGameState::egpNetPlaygroundGameState(int ownerID)
 	mpEventManager = new EventManager();
 	//clientState = nullptr;
 	memset(m_data, 0, sizeof(m_data));
-
+	myID = ownerID;
 
 	// setup all object headers
 	unsigned int i;
@@ -39,8 +39,11 @@ egpNetPlaygroundGameState::egpNetPlaygroundGameState(int ownerID)
 
 	// agent at our index is owned by us
 	// this may not always be the case, e.g. if one player has multiple agents
-	m_data->m_agentStatus[ownerID].ownerID = ownerID;
-	m_data->m_agentStatus[ownerID].flags = objFlag_active;
+	if (ownerID != -1)
+	{
+		m_data->m_agentStatus[ownerID].ownerID = ownerID;
+		m_data->m_agentStatus[ownerID].flags = objFlag_active;
+	}
 
 	for (i = 0; i < objLimit_ball; ++i)
 	{
@@ -146,7 +149,7 @@ int egpNetPlaygroundGameState::ProcessInput(const egpKeyboard *keyboard, const e
 			agentPtr->velX = agentMoveSpeed * (float)(egpKeyboardKeyIsDown(keyboard, 'd') - egpKeyboardKeyIsDown(keyboard, 'a'));
 			agentPtr->velY = 0;// agentMoveSpeed * (float)(egpKeyboardKeyIsDown(keyboard, 'w') - egpKeyboardKeyIsDown(keyboard, 's'));
 
-			if (status->ownerID == 0)
+			if (status->ownerID == 0 && myID == 0)
 			{
 				cooldownBall--;
 				if (egpKeyboardKeyIsDown(keyboard, 's'))
@@ -198,7 +201,7 @@ int egpNetPlaygroundGameState::UpdateState(double dt)
 		return -1;
 	}
 
-	if (sentBallID != -1)
+	if (sentBallID != -1 && myID == 0) //ONLY PLAYER ONE
 	{
 		//clientState->SendTheBall(m_data->m_agent[0].posX, sentBallID);
 		clientState->SendTheBall(agentXUpdated, sentBallID);
@@ -224,7 +227,7 @@ int egpNetPlaygroundGameState::UpdateState(double dt)
 			agentPtr->posX += (float)dt * agentPtr->velX;
 			agentXUpdated = m_data->m_agent[0].posX;
 
-			printf("Pos x: %d\n", agentXUpdated); //when the agent stops moving, his position is reset to zero somehow no matter where he is
+			printf("Pos x: %f\n", agentXUpdated); //when the agent stops moving, his position is reset to zero somehow no matter where he is
 			//agentPtr->velY = 0; //For some reason if we don't do this, we can't move left or right at all
 			agentPtr->posY += (float)dt * agentPtr->velY;
 
@@ -329,8 +332,8 @@ int egpNetPlaygroundGameState::AddBall(float posX, int id)
 
 	if (ballIsValid)
 	{
-		m_data->m_balls[i].posX = posX;
-		m_data->m_balls[i].posY = 0;
+		m_data->m_balls[ballID].posX = posX;
+		m_data->m_balls[ballID].posY = 0;
 	}
 
 	return ballID;

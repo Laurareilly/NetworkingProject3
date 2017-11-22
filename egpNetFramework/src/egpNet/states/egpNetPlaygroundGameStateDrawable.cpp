@@ -59,7 +59,7 @@ int egpNetPlaygroundGameStateDrawable::RenderState(int canvasWidth, int canvasHe
 	for (unsigned int i = 0; i < objLimit_ball; ++i)
 	{
 		// color
-		glColor3f(1.0f, 1.0f, 0.0f);
+		glColor3f(0.5f * i, 1.0f, 1.0f - (i * 0.5f)); //im colorblind so i really gotta mess with this, geez (-rob)
 		glVertex2f(m_data->m_balls[i].posX, m_data->m_balls[i].posY);
 	}
 
