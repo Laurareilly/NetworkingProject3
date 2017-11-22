@@ -132,6 +132,25 @@ int egpNetPlaygroundGameState::ProcessInput(const egpKeyboard *keyboard, const e
 {
 	if (!gameActive)
 	{
+		if (egpKeyboardKeyIsDown(keyboard, 'r'))
+		{
+			printf("reset game");
+			if (data.isLocal)
+			{
+				ResetGame();
+			}
+			else
+			{
+				if (clientState == nullptr)
+				{
+					printf("darn");
+				}
+				else
+				{
+					clientState->SendResetGame(0);
+				}
+			}
+		}
 		return -1;
 	}
 
@@ -147,6 +166,13 @@ int egpNetPlaygroundGameState::ProcessInput(const egpKeyboard *keyboard, const e
 		if (keyboard)
 		{
 			agentPtr->velX = agentMoveSpeed * (float)(egpKeyboardKeyIsDown(keyboard, 'd') - egpKeyboardKeyIsDown(keyboard, 'a'));
+
+			if (data.isLocal)
+			{
+				m_data->m_agent[1].velX = agentMoveSpeed * (float)(egpKeyboardKeyIsDown(keyboard, 'j') - egpKeyboardKeyIsDown(keyboard, 'l'));
+				//agentPtr->velX = agentMoveSpeed * (float)(egpKeyboardKeyIsDown(keyboard, 'j') - egpKeyboardKeyIsDown(keyboard, 'l'));
+			}
+
 			agentPtr->velY = 0;// agentMoveSpeed * (float)(egpKeyboardKeyIsDown(keyboard, 'w') - egpKeyboardKeyIsDown(keyboard, 's'));
 
 			if (status->ownerID == 0 && myID == 0)
@@ -227,7 +253,7 @@ int egpNetPlaygroundGameState::UpdateState(double dt)
 			agentPtr->posX += (float)dt * agentPtr->velX;
 			agentXUpdated = m_data->m_agent[0].posX;
 
-			printf("Pos x: %f\n", agentXUpdated); //when the agent stops moving, his position is reset to zero somehow no matter where he is
+			//printf("Pos x: %f\n", agentXUpdated); //when the agent stops moving, his position is reset to zero somehow no matter where he is
 			//agentPtr->velY = 0; //For some reason if we don't do this, we can't move left or right at all
 			agentPtr->posY += (float)dt * agentPtr->velY;
 
@@ -279,10 +305,22 @@ int egpNetPlaygroundGameState::UpdateState(double dt)
 						AddScoreEvent *addScore = new AddScoreEvent(&mScore, 1);
 						mpEventManager->AddEvent(addScore);
 
-						if (mScore >= 9)
+						if (data.isLocal)
 						{
-							EndGameEvent *endGame = new EndGameEvent(this);
-							mpEventManager->AddEvent(endGame);
+							if (mScore >= 9)
+							{
+								EndGameEvent *endGame = new EndGameEvent(this);
+								mpEventManager->AddEvent(endGame);
+							}
+
+						}
+						else
+						{
+							if (mScore >= 9)
+							{
+								//send networked game over
+								clientState->SendGameOver(0);
+							}
 						}
 					}
 				}
@@ -344,7 +382,22 @@ void egpNetPlaygroundGameState::SetAppState(egpApplicationState *cState)
 	clientState = cState;
 }
 
-//void egpNetPlaygroundGameState::SetAppState(egpClientApplicationState * cState)
-//{
-//	clientState = cState;
-//}
+void egpNetPlaygroundGameState::ResetGame()
+{
+	//reset the score
+	mScore = 0;
+
+	//reset ball positions
+	unsigned int i;
+	for (i = 0; i < objLimit_ball; ++i)
+	{
+		m_data->m_balls[i].posX = 60;
+		m_data->m_balls[i].posY = -450;
+		m_data->m_balls[i].velY = -200;
+	}
+
+	m_data->m_agent[0].posY = 0;
+	m_data->m_agent[1].posY = -200;
+
+	gameActive = true;
+}

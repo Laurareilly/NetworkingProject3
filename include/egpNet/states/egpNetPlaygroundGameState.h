@@ -35,7 +35,6 @@ class egpNetPlaygroundGameState : public egpGameState
 	// general rule: 
 	//	- object header/status, object data, header, data, ...
 
-	EventManager *mpEventManager;
 
 protected:
 
@@ -91,6 +90,7 @@ protected:
 
 public: 
 
+	EventManager *mpEventManager;
 	bool gameActive = true;
 	egpNetPlaygroundGameState(int ownerID);
 	virtual ~egpNetPlaygroundGameState();
@@ -113,6 +113,7 @@ public:
 
 	egpApplicationState* clientState;
 	void SetAppState(egpApplicationState * cState);
+	void ResetGame();
 };
 
 

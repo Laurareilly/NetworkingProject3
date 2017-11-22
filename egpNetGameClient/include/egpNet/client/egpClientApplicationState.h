@@ -49,6 +49,9 @@ public:
 	void SetWindowState(const egpWindowState *windowState);
 
 	void SendTheBall(float position, int ID);
+	void SendResetGame(int ID);
+	void SendGameOver(int ID);
+	
 	void SendEmptyMessage(int ID);
 
 

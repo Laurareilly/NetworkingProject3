@@ -578,3 +578,13 @@ void egpApplicationState::SendTheBall(float position, int ID)
 {
 	printf("dan fix this");
 }
+
+void egpApplicationState::SendResetGame(int ID)
+{
+	printf("reset the game");
+}
+
+void egpApplicationState::SendGameOver(int ID)
+{
+	printf("game over");
+}

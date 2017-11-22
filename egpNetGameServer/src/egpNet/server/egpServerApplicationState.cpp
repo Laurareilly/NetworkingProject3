@@ -36,19 +36,21 @@ int egpServerApplicationState::ProcessPacket(const RakNet::Packet *packet)
 		switch (packet->data[0])
 		{
 			// handle time-stamped messages
-		case ID_TIMESTAMP: {
+		case ID_TIMESTAMP: 
+		{
 			RakNet::Time readTime_local = RakNet::GetTime(), sentTime_local, sentTime_remote, sentToReadDiff_local;
 			const unsigned char *userData = packet->data + ReadTimeStamp((char *)packet->data, sentTime_local, sentTime_remote);
 			const int lastPing = mp_peer->GetLastPing(packet->systemAddress);
 			sentToReadDiff_local = (readTime_local - sentTime_local);
 
-		//	printf(" Read time (local) = %I64d (last ping = %d) \n", readTime_local, lastPing);
-		//	printf(" Sent time (local) = %I64d;  Sent time (remote) = %I64d \n", sentTime_local, sentTime_remote);
-		//	printf(" Sent -> Read diff = %I64d;  Clock diff = %I64d \n\n", sentToReadDiff_local, (sentTime_local - sentTime_remote));
+			//	printf(" Read time (local) = %I64d (last ping = %d) \n", readTime_local, lastPing);
+			//	printf(" Sent time (local) = %I64d;  Sent time (remote) = %I64d \n", sentTime_local, sentTime_remote);
+			//	printf(" Sent -> Read diff = %I64d;  Clock diff = %I64d \n\n", sentToReadDiff_local, (sentTime_local - sentTime_remote));
 
 			switch (userData[0])
 			{
-			case egpID_currentTime: {
+			case egpID_currentTime:
+			{
 				// process data from client
 				RakNet::Time sentToReadDiff_remote, sentToReadDiff_other;
 				userData += ReadTimeStamp((char *)userData, sentToReadDiff_remote, sentToReadDiff_other);
@@ -68,7 +70,8 @@ int egpServerApplicationState::ProcessPacket(const RakNet::Packet *packet)
 				printf(" Broadcast update message from (%d) at time %I64d \n\n", otherID, packetTime_local);
 			}	break;
 
-			case egpID_stateInput: {
+			case egpID_stateInput:
+			{
 				// receive input from other, process input as if it were input into our state
 				RakNet::Time sentToReadDiff_remote, sentToReadDiff_other;
 				userData += ReadTimeStamp((char *)userData, sentToReadDiff_remote, sentToReadDiff_other);
@@ -89,7 +92,8 @@ int egpServerApplicationState::ProcessPacket(const RakNet::Packet *packet)
 				}
 			} break;
 
-			case egpID_stateUpdate: {
+			case egpID_stateUpdate:
+			{
 				// forward to others
 				RakNet::Time sentToReadDiff_remote, sentToReadDiff_other;
 				userData += ReadTimeStamp((char *)userData, sentToReadDiff_remote, sentToReadDiff_other);
@@ -103,7 +107,8 @@ int egpServerApplicationState::ProcessPacket(const RakNet::Packet *packet)
 					const double delay_s = (double)(sentToReadDiff_local + sentToReadDiff_remote) * 0.001;
 					mp_state->DeserializeData((char*)userData, 4096, 0, delay_s);
 				}
-			} break;
+			} 
+			break;
 
 			case egpID_sendBall:
 			{
@@ -114,7 +119,7 @@ int egpServerApplicationState::ProcessPacket(const RakNet::Packet *packet)
 					float tempX = dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->GetAgentPosition(0);
 					int tempID = *((int *)userData);
 					userData += sizeof(int);
-					
+
 					//ball should 100% equal tempID, this is to check if im networking right
 					int ball = dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->AddBall(tempX, tempID);
 					SendBall sendBall[1] = { egpID_sendBall, tempX, ball };
@@ -131,58 +136,102 @@ int egpServerApplicationState::ProcessPacket(const RakNet::Packet *packet)
 					*((int *)msgPtr) = ball;
 					msgPtr += sizeof(ball);
 
-				/*	*((SendBall *)msgPtr) = *sendBall;
-					msgPtr += sizeof(SendBall);*/
+					/*	*((SendBall *)msgPtr) = *sendBall;
+						msgPtr += sizeof(SendBall);*/
 
-					/**msg = egpID_sendBall;
-					msg += sizeof(char);*/
-					/*memcpy(msg, &tempX, sizeof(float));
-					msg += sizeof(float);
-					memcpy(msg, &ball, sizeof(int));
-					msg += sizeof(int);*/
+						/**msg = egpID_sendBall;
+						msg += sizeof(char);*/
+						/*memcpy(msg, &tempX, sizeof(float));
+						msg += sizeof(float);
+						memcpy(msg, &ball, sizeof(int));
+						msg += sizeof(int);*/
 
 					SendPacket(msg, (int)(msgPtr - msg), m_maxIncomingConnections, 1, 0);
 					printf(" sent ball message at time %I64d \n\n", packetTime_local);
 
 				}
 			}
-				break;
+			break;
 
 			case egpID_serverGetBallRequest:
 			{
 				printf("dan");
 			}
-			break;
+
+			case egpID_gameOver:
+			{
+				printf("game over");
+				if (mp_state)
+				{
+					RakNet::Time sentToReadDiff_remote, sentToReadDiff_other;
+					userData += ReadTimeStamp((char *)userData, sentToReadDiff_remote, sentToReadDiff_other);
+					int tempID = *((int *)userData);
+					userData += sizeof(int);
+
+
+					const RakNet::Time packetTime_local = RakNet::GetTime();
+					char msg[64], *msgPtrTmp = msg + WriteTimeStamp(msg, packetTime_local, packetTime_local),
+						*msgPtr = msgPtrTmp + WriteTimeStamp(msgPtrTmp, 0, 0);
+					*msgPtrTmp = (char)egpID_gameOver;
+
+					//	*((int *)msgPtr) = ball;
+					//	msgPtr += sizeof(ball);
+
+					SendPacket(msg, (int)(msgPtr - msg), m_maxIncomingConnections, 1, 0);
+				}
+			}
+				break;
+			case egpID_resetGame:
+			{
+				printf("reset game");
+				if (mp_state)
+				{
+					RakNet::Time sentToReadDiff_remote, sentToReadDiff_other;
+					userData += ReadTimeStamp((char *)userData, sentToReadDiff_remote, sentToReadDiff_other);
+					int tempID = *((int *)userData);
+					userData += sizeof(int);
+
+
+					const RakNet::Time packetTime_local = RakNet::GetTime();
+					char msg[64], *msgPtrTmp = msg + WriteTimeStamp(msg, packetTime_local, packetTime_local),
+						*msgPtr = msgPtrTmp + WriteTimeStamp(msgPtrTmp, 0, 0);
+					*msgPtrTmp = (char)egpID_resetGame;
+
+					SendPacket(msg, (int)(msgPtr - msg), m_maxIncomingConnections, 1, 0);
+				}
+			}
+				break;
 
 			case 0:
 				printf("No data. \n\n");
 				break;
 			}
 
-		}	return 1;
+			}	return 1;
 
-		case ID_NEW_INCOMING_CONNECTION: {
-			// additional processing for accepted request: 
-			// send connection index of new participant
-			int i = GetConnectionIndex(packet->systemAddress);
-			if (i >= 0)
+			case ID_NEW_INCOMING_CONNECTION: 
 			{
-				char msg[8] = { 0 }, *msgPtr = msg;
-				*(msgPtr++) = (char)egpID_connectionIndex;
-				*((int *)msgPtr) = i;
-				msgPtr += sizeof(i);
-				SendPacket(msg, (int)(msgPtr - msg), i, 0, 1);
+				// additional processing for accepted request: 
+				// send connection index of new participant
+				int i = GetConnectionIndex(packet->systemAddress);
+				if (i >= 0)
+				{
+					char msg[8] = { 0 }, *msgPtr = msg;
+					*(msgPtr++) = (char)egpID_connectionIndex;
+					*((int *)msgPtr) = i;
+					msgPtr += sizeof(i);
+					SendPacket(msg, (int)(msgPtr - msg), i, 0, 1);
+				}
+			}	return 1;
+
+
+				//	default:
+				//		printf("Message with identifier %i has arrived.\n", packet->data[0]);
+				//		break;
 			}
-		}	return 1;
-
-
-	//	default:
-	//		printf("Message with identifier %i has arrived.\n", packet->data[0]);
-	//		break;
 		}
-	}
 
-	return 0;
+						   return 0;
 }
 
 

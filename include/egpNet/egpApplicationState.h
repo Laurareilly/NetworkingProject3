@@ -80,6 +80,7 @@ protected:
 		egpID_stateUpdate,
 		egpID_sendBall,
 		egpID_gameOver,
+		egpID_resetGame,
 		egpID_serverGetBallRequest,
 	};
 
@@ -141,6 +142,8 @@ public:
 	static unsigned short GetUserPort();
 
 	virtual void SendTheBall(float position, int ID);
+	virtual void SendResetGame(int ID);
+	virtual void SendGameOver(int ID);
 };
 
 

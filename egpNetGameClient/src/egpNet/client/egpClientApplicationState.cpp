@@ -15,6 +15,7 @@
 #include "egpNet/states/egpNetPlaygroundGameStateDrawable.h"
 
 #include "egpNet/client/egpWindowState.h"
+#include "egpNet/events/MyEvents.h"
 
 
 // internal updates
@@ -104,7 +105,61 @@ int egpClientApplicationState::ProcessPacket(const RakNet::Packet *packet)
 
 			case egpID_serverGetBallRequest:
 			{
-				printf("dan");
+				RakNet::Time sentToReadDiff_remote, sentToReadDiff_other;
+				userData += ReadTimeStamp((char *)userData, sentToReadDiff_remote, sentToReadDiff_other);
+				int otherID = *((int *)userData);
+
+				float tempX = *((float *)userData);
+				userData += sizeof(float);
+				int tempID = *((int *)userData);
+				userData += sizeof(int);
+
+				if (tempID < 0 || tempID > 2)
+				{
+					return 0; //DEBUG, why would we get a SHITE id???
+				}
+
+				/*SendBall *sendBall = (SendBall*)userData;
+				float tempX = sendBall->posX;
+				int tempID = sendBall->ballID;*/
+				dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->AddBall(tempX, tempID);
+			}
+
+			case egpID_gameOver:
+			{
+				printf("game over");
+				RakNet::Time sentToReadDiff_remote, sentToReadDiff_other;
+				userData += ReadTimeStamp((char *)userData, sentToReadDiff_remote, sentToReadDiff_other);
+				int otherID = *((int *)userData);
+
+				int tempID = *((int *)userData);
+				userData += sizeof(int);
+
+				if (tempID < 0 || tempID > 2)
+				{
+					return 0; //DEBUG, why would we get a SHITE id???
+				}
+
+				//EndGameEvent *endGame = new EndGameEvent(dynamic_cast<egpNetPlaygroundGameState*>(mp_state));
+				//dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->mpEventManager->AddEvent(endGame);
+			}
+
+			case egpID_resetGame:
+			{
+				printf("game over");
+				RakNet::Time sentToReadDiff_remote, sentToReadDiff_other;
+				userData += ReadTimeStamp((char *)userData, sentToReadDiff_remote, sentToReadDiff_other);
+				int otherID = *((int *)userData);
+
+				int tempID = *((int *)userData);
+				userData += sizeof(int);
+
+				if (tempID < 0 || tempID > 2)
+				{
+					return 0; //DEBUG, why would we get a SHITE id???
+				}
+
+				dynamic_cast<egpNetPlaygroundGameState*>(mp_state)->ResetGame();
 			}
 			break;
 
@@ -289,6 +344,7 @@ int egpClientApplicationState::OnKeyPress(unsigned char key)
 	case 'L':
 		if (mp_state == nullptr)
 		{
+			printf("You chose: Local!\n");
 			mp_state = new egpNetPlaygroundGameStateDrawable(0); //no connection index because this is local //THIS USED TO BE DRAWABLE INCAS THIS DOESNT WORK
 			m_myConnectionIndex = 0;
 			mp_state->data.isLocal = true;
@@ -337,6 +393,30 @@ void egpClientApplicationState::SendTheBall(float position, int ID)
 
 		sentBallThisFrame = true;
 	}
+}
+
+void egpClientApplicationState::SendResetGame(int ID)
+{
+	const RakNet::Time packetTime_local = RakNet::GetTime();
+	char msg[64], *msgPtrTmp = msg + WriteTimeStamp(msg, packetTime_local, packetTime_local),
+	*msgPtr = msgPtrTmp + WriteTimeStamp(msgPtrTmp, 0, 0);
+	*msgPtrTmp = (char)egpID_resetGame;
+	*((int *)msgPtr) = ID;
+	msgPtr += sizeof(ID);
+
+	SendPacket(msg, (int)(msgPtr - msg), m_maxIncomingConnections, 0, 0);
+}
+
+void egpClientApplicationState::SendGameOver(int ID)
+{
+	const RakNet::Time packetTime_local = RakNet::GetTime();
+	char msg[64], *msgPtrTmp = msg + WriteTimeStamp(msg, packetTime_local, packetTime_local),
+	*msgPtr = msgPtrTmp + WriteTimeStamp(msgPtrTmp, 0, 0);
+	*msgPtrTmp = (char)egpID_gameOver;
+	*((int *)msgPtr) = ID;
+	msgPtr += sizeof(ID);
+
+	SendPacket(msg, (int)(msgPtr - msg), m_maxIncomingConnections, 0, 0);
 }
 
 void egpClientApplicationState::SendEmptyMessage(int ID)
