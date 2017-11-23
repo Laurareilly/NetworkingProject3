@@ -4,7 +4,7 @@
 
 	Base interface for networked game state. Inherit and build other states 
 	to form a finite state machine with transitions.
-	NOTE: GAME STATE INTERFACES SHOULD NOT DIFFER WHETHER YOU'RE A SERVER OR 
+	NOTE: GAME STATE INTERFACES SHOULD NOT DIFFER WHETHER YOU'RE A " OR 
 	CLIENT; IT'S YOUR APPLICATION'S REPRESENTATION OF THE GAME "RIGHT NOW".
 
 	Additional contributions: 

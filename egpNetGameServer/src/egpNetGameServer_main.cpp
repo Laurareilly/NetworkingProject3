@@ -6,6 +6,8 @@
 	Server main file.
 
 	Additional contributions: 
+
+	This file was modified by Laura Reilly and Robert Mitchell with permission by author.
 */
 
 //-----------------------------------------------------------------------------
@@ -58,6 +60,13 @@ int main(int argc, char **argv)
 {
 	printf("\n----------------------------------------");
 	printf("\n--     EGP NET GAME ****SERVER****    --");
+	printf("\n--     CONTROLS:--");
+	printf("\n--     Networked movement: A/D moves left right--");
+	printf("\n--     Local movement: A/D moves top player left right. J/L moves bottom player left right--");
+	printf("\n--     L- Local game--");
+	printf("\n--     C- Connect to a networked game--");
+	printf("\n--     R- Replay game after game over--");
+	printf("\n--     S- Top player drops bombs-- try to hit bottom player--");
 	printf("\n----------------------------------------");
 	printf("\n\n");
 

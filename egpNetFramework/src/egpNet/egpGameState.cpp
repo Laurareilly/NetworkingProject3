@@ -5,6 +5,8 @@
 	Base implementation for networked game state.
 
 	Additional contributions: 
+
+	This file was modified by Laura Reilly and Robert Mitchell with permission by author.
 */
 
 #include "egpNet/egpGameState.h"
